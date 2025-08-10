@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { describe, it, expect } from 'vitest';
-import { Workspace } from '../../src/domain/entities/Workspace.js';
+import { Workspace } from '../../../src/domain/entities/Workspace.ts';
 
 describe('Workspace entity basic test', () => {
   it('should create a Workspace instance with given properties', () => {

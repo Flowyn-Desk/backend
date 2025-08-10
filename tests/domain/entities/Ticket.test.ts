@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { validate } from 'class-validator';
-import { Ticket } from '../../src/domain/entities/Ticket.js';
-import { TicketSeverity } from '../../src/domain/enums/TicketSeverity.js';
-import { TicketStatus } from '../../src/domain/enums/TicketStatus.js';
+import { Ticket } from '../../../src/domain/entities/Ticket.ts';
+import { TicketSeverity } from '../../../src/domain/enums/TicketSeverity.ts';
+import { TicketStatus } from '../../../src/domain/enums/TicketStatus.ts';
 
 describe('Ticket Entity', () => {
     const validTicketData = {

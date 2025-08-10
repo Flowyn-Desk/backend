@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { describe, it, expect } from 'vitest';
-import { TicketHistory } from '../../src/domain/entities/TicketHistory.js';
-import { TicketSeverity } from '../../src/domain/enums/TicketSeverity.js';
-import { TicketStatus } from '../../src/domain/enums/TicketStatus.js';
+import { TicketHistory } from '../../../src/domain/entities/TicketHistory.ts';
+import { TicketSeverity } from '../../../src/domain/enums/TicketSeverity.ts';
+import { TicketStatus } from '../../../src/domain/enums/TicketStatus.ts';
 
 describe('TicketHistory entity basic test', () => {
   it('should create a TicketHistory instance with required properties', () => {
