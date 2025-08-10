@@ -1,4 +1,4 @@
-import { LogType } from '../enums/LogType.js';
+import { LogType } from '../domain/enums/LogType.js';
 import chalk from 'chalk';
 
 export class Logger {
