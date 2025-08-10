@@ -1,0 +1,59 @@
+import { IsUUID, IsEnum, IsOptional, IsString, IsDate } from 'class-validator';
+import { BaseEntity } from './BaseEntity.js';
+import { TicketStatus } from '../enums/TicketStatus.js';
+import { TicketSeverity } from '../enums/TicketSeverity.js';
+
+export class TicketHistory extends BaseEntity {
+    @IsUUID()
+    ticketUuid: string;
+
+    @IsUUID()
+    userUuid: string;
+
+    @IsEnum(TicketStatus)
+    previousStatus: TicketStatus;
+
+    @IsEnum(TicketStatus)
+    newStatus: TicketStatus;
+
+    @IsOptional()
+    @IsEnum(TicketSeverity)
+    previousSeverity: TicketSeverity | undefined;
+
+    @IsOptional()
+    @IsEnum(TicketSeverity)
+    newSeverity?: TicketSeverity | undefined;;
+
+    @IsOptional()
+    @IsString()
+    changeReason?: string | undefined;;
+
+    @IsDate()
+    timestamp: Date;
+
+    constructor(
+        ticketUuid: string,
+        userUuid: string,
+        previousStatus: TicketStatus,
+        newStatus: TicketStatus,
+        timestamp: Date,
+        previousSeverity?: TicketSeverity,
+        newSeverity?: TicketSeverity,
+        changeReason?: string,
+        uuid?: string,
+        createdAt?: Date,
+        updatedAt?: Date,
+        deletedAt?: Date,
+        active?: boolean
+    ) {
+        super(uuid, createdAt, updatedAt, deletedAt, active);
+        this.ticketUuid = ticketUuid;
+        this.userUuid = userUuid;
+        this.previousStatus = previousStatus;
+        this.newStatus = newStatus;
+        this.previousSeverity = previousSeverity;
+        this.newSeverity = newSeverity;
+        this.changeReason = changeReason;
+        this.timestamp = timestamp;
+    }
+}
