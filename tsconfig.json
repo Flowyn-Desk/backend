@@ -2,9 +2,11 @@
   "compilerOptions": {
     "module": "nodenext",
     "target": "esnext",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "moduleResolution": "nodenext",
     "types": [
-      "node"
+      "node",
     ],
     "lib": [
       "esnext"
