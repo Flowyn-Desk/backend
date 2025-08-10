@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -12,4 +6,150 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// ============================================
+// WORKSPACE MODEL
+// ============================================
+model Workspace {
+  uuid         String   @id @default(uuid()) @db.Uuid
+  workspaceKey String   @unique @map("workspace_key") @db.VarChar(50)
+  name         String   @db.VarChar(255)
+  createdBy    String   @map("created_by") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
+  active       Boolean  @default(true)
+
+  // Relations
+  tickets       Ticket[]
+  createdByUser User     @relation(fields: [createdBy], references: [uuid], onDelete: Restrict)
+
+  @@map("workspace")
+  @@index([workspaceKey])
+  @@index([createdBy])
+  @@index([active])
+}
+
+// ============================================
+// USER MODEL
+// ============================================
+model User {
+  uuid         String   @id @default(uuid()) @db.Uuid
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  name         String   @db.VarChar(255)
+  role         UserRole
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
+  active       Boolean  @default(true)
+
+  // Relations
+  createdTickets    Ticket[]        @relation("TicketCreator")
+  ticketHistories   TicketHistory[]
+  createdWorkspaces Workspace[]
+
+  @@map("user")
+  @@index([email])
+  @@index([role])
+  @@index([active])
+}
+
+// ============================================
+// TICKET MODEL
+// ============================================
+model Ticket {
+  uuid                  String         @id @default(uuid()) @db.Uuid
+  ticketNumber          String         @unique @map("ticket_number") @db.VarChar(20)
+  workspaceUuid         String         @map("workspace_uuid") @db.Uuid
+  createdByUuid         String         @map("created_by_uuid") @db.Uuid
+  title                 String         @db.VarChar(500)
+  description           String         @db.Text
+  category              String?        @db.VarChar(100)
+  severity              TicketSeverity
+  status                TicketStatus   @default(DRAFT)
+  severityChangeReason  String?        @map("severity_change_reason") @db.Text
+  dueDate               DateTime       @map("due_date") @db.Timestamptz
+  createdAt             DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt             DateTime?      @map("deleted_at") @db.Timestamptz
+  active                Boolean        @default(true)
+
+  // Relations
+  workspace       Workspace       @relation(fields: [workspaceUuid], references: [uuid], onDelete: Restrict)
+  createdBy       User            @relation("TicketCreator", fields: [createdByUuid], references: [uuid], onDelete: Restrict)
+  ticketHistories TicketHistory[]
+
+  @@map("ticket")
+  @@index([ticketNumber], map: "ticket_ticket_number_idx")
+  @@index([ticketNumber(sort: Desc)], map: "ticket_ticket_number_desc_idx")
+  @@index([workspaceUuid])
+  @@index([createdByUuid])
+  @@index([status])
+  @@index([severity])
+  @@index([dueDate])
+  @@index([active])
+  @@index([createdAt])
+}
+
+// ============================================
+// TICKET HISTORY MODEL
+// ============================================
+model TicketHistory {
+  uuid             String          @id @default(uuid()) @db.Uuid
+  ticketUuid       String          @map("ticket_uuid") @db.Uuid
+  userUuid         String          @map("user_uuid") @db.Uuid
+  previousStatus   TicketStatus    @map("previous_status")
+  newStatus        TicketStatus    @map("new_status")
+  previousSeverity TicketSeverity? @map("previous_severity")
+  newSeverity      TicketSeverity? @map("new_severity")
+  changeReason     String?         @map("change_reason") @db.Text
+  timestamp        DateTime        @default(now()) @db.Timestamptz
+  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt        DateTime?       @map("deleted_at") @db.Timestamptz
+  active           Boolean         @default(true)
+
+  // Relations
+  ticket Ticket @relation(fields: [ticketUuid], references: [uuid], onDelete: Cascade)
+  user   User   @relation(fields: [userUuid], references: [uuid], onDelete: Restrict)
+
+  @@map("ticket_history")
+  @@index([ticketUuid])
+  @@index([userUuid])
+  @@index([timestamp(sort: Desc)])
+  @@index([newStatus])
+  @@index([active])
+}
+
+// ============================================
+// ENUMS
+// ============================================
+enum UserRole {
+  MANAGER
+  ASSOCIATE
+  ADMIN
+
+  @@map("user_role")
+}
+
+enum TicketSeverity {
+  VERY_HIGH
+  HIGH
+  MEDIUM
+  LOW
+  EASY
+
+  @@map("ticket_severity")
+}
+
+enum TicketStatus {
+  DRAFT
+  REVIEW
+  PENDING
+  OPEN
+  CLOSED
+
+  @@map("ticket_status")
 }
