@@ -1,6 +1,7 @@
 import type { PrismaClient } from "../../../../generated/prisma/client.js";
 import type { BaseEntity } from "../../../domain/entities/BaseEntity.js";
 import type { IBaseRepository } from "../../../domain/repositories/IBaseRepository.js";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError.ts";
 
 export abstract class BaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
     protected readonly prisma: PrismaClient;
@@ -19,13 +20,16 @@ export abstract class BaseRepository<T extends BaseEntity> implements IBaseRepos
         return this.mapToEntity(created);
     }
 
-    async findByUuid(uuid: string): Promise<T | null> {
+    async findByUuid(uuid: string): Promise<T> {
         const modelName = this.getModelName();
         // @ts-ignore
         const record = await this.prisma[modelName].findFirst({
             where: { uuid, active: true },
         });
-        return record ? this.mapToEntity(record) : null;
+        if (!record){
+            throw new NotFoundError(`The entity ${uuid} was not found`)
+        }
+        return this.mapToEntity(record);
     }
 
     async findAll(): Promise<T[]> {

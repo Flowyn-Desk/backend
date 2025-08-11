@@ -38,25 +38,19 @@ describe('WorkspaceRepository (inherited BaseRepository methods)', () => {
     expect(result.uuid).toBe('uuid-1');
   });
 
-  it('findByUuid() should call prisma.workspace.findFirst and return entity or null', async () => {
-    prismaMock.workspace.findFirst.mockResolvedValue({
-      uuid: 'uuid-2',
-      workspaceKey: 'key-2',
-      name: 'Another WS',
-      createdBy: 'user-uuid',
-      active: true
-    });
-
-    const result = await repo.findByUuid('uuid-2');
-    expect(prismaMock.workspace.findFirst).toHaveBeenCalledWith({
-      where: { uuid: 'uuid-2', active: true }
-    });
-    expect(result).toBeInstanceOf(Workspace);
-
+  it('findByUuid() should throw NotFoundError if entity is not found', async () => {
     prismaMock.workspace.findFirst.mockResolvedValue(null);
-    const nullResult = await repo.findByUuid('not-found');
-    expect(nullResult).toBeNull();
-  });
+  
+    await expect(repo.findByUuid('not-found-uuid')).rejects.toMatchObject({
+      name: 'NotFoundError',
+      message: 'The entity not-found-uuid was not found',
+    });
+    await expect(repo.findByUuid('not-found-uuid')).rejects.toThrow('The entity not-found-uuid was not found');
+  
+    expect(prismaMock.workspace.findFirst).toHaveBeenCalledWith({
+      where: { uuid: 'not-found-uuid', active: true }
+    });
+  })
 
   it('findAll() should return all active workspaces mapped to entities', async () => {
     prismaMock.workspace.findMany.mockResolvedValue([
