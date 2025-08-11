@@ -74,7 +74,7 @@ describe('AuthService', () => {
             expect(response.payload).toBeDefined();
             expect(typeof response.payload).toBe('string');
 
-            const decoded = jwt.verify(response.payload as string, process.env.JWT_SECRET as string) as UserResponseDto;
+            const decoded = jwt.verify(response.payload, process.env.JWT_SECRET as string) as UserResponseDto;
             expect(decoded.uuid).toBe(mockUser.uuid);
             expect(decoded.email).toBe(mockUser.email);
             expect(decoded.role).toBe(mockUser.role);
