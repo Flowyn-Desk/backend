@@ -5,7 +5,7 @@ import type { TicketHistoryResponseDto } from "../../application/dto/ticket_hist
 
 
 export interface ITicketHistoryService extends IBaseService<TicketHistoryRequestDto, TicketHistoryResponseDto> {
-  findByTicket(ticketUuid: string): Promise<ServiceResponse<TicketHistoryResponseDto[]>>;
-  findByUser(userUuid: string): Promise<ServiceResponse<TicketHistoryResponseDto[]>>;
-  findRecentActivity(limit?: number): Promise<ServiceResponse<TicketHistoryResponseDto[]>>;
+  findByTicket(ticketUuid: string): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>>;
+  findByUser(userUuid: string): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>>;
+  findRecentActivity(limit?: number): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>>;
 }

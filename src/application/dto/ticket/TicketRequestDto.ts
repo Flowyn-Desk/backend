@@ -9,6 +9,6 @@ export interface TicketRequestDto {
   description: string;
   severity: TicketSeverity;
   status: TicketStatus;
-  severityChangeReason: string | null;
+  severityChangeReason: string;
   dueDate: Date;
 }
