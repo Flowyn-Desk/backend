@@ -5,7 +5,6 @@ import type { ServiceResponse } from "./ServiceResponse.js";
 
 export interface IWorkspaceService extends IBaseService<WorkspaceRequestDto, WorkspaceResponseDto> {
     getWorkspaceByKey(workspaceKey: string): Promise<ServiceResponse<WorkspaceResponseDto>>;
-    getWorkspacesByCreator(createdByUuid: string): Promise<ServiceResponse<Array<WorkspaceResponseDto>>>;
     addUserToWorkspace(workspaceUuid: string, userUuid: string): Promise<ServiceResponse<void>>;
     removeUserFromWorkspace(workspaceUuid: string, userUuid: string): Promise<ServiceResponse<void>>;
     getWorkspaceMembers(workspaceUuid: string): Promise<ServiceResponse<Array<string>>>;
