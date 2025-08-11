@@ -51,10 +51,18 @@ describe('UserRepository', () => {
     expect(result?.uuid).toBe(fakeRecord.uuid);
   });
 
-  it('findByEmail should return null when not found', async () => {
+  it('findByEmail should throw not found error when user is not found', async () => {
     prismaMock.user.findFirst.mockResolvedValue(null);
-    const result = await repo.findByEmail('missing@example.com');
-    expect(result).toBeNull();
+  
+    await expect(repo.findByEmail('missing@provider.com')).rejects.toMatchObject({
+      name: 'NotFoundError',
+      message: 'The user missing@provider.com was not found',
+    });
+    await expect(repo.findByEmail('missing@provider.com')).rejects.toThrow('The user missing@provider.com was not found');
+  
+    expect(prismaMock.user.findFirst).toHaveBeenCalledWith({
+      where: { email: 'missing@provider.com', active: true }
+    })
   });
 
   it('findByRole should return an array of Users', async () => {

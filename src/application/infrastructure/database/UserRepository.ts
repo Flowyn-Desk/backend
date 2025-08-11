@@ -3,6 +3,7 @@ import type { IUserRepository } from "../../../domain/repositories/IUserReposito
 import { BaseRepository } from "./BaseRepository.js";
 import type { UserRole } from "../../../domain/enums/UserRole.js";
 import type { PrismaClient } from "../../../../generated/prisma/client.js";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError.ts";
 
 export class UserRepository extends BaseRepository<User> implements IUserRepository {
     constructor(prisma: PrismaClient) {
@@ -27,11 +28,14 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         });
     }
 
-    async findByEmail(email: string): Promise<User | null> {
+    async findByEmail(email: string): Promise<User> {
         const record = await this.prisma.user.findFirst({
             where: { email, active: true },
         });
-        return record ? this.mapToEntity(record) : null;
+        if (!record){
+            throw new NotFoundError(`The user ${email} was not found`)
+        }
+        return this.mapToEntity(record);
     }
 
     async findByRole(role: UserRole): Promise<User[]> {
