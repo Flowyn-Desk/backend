@@ -70,13 +70,15 @@ describe('TicketRepository', () => {
   });
 
   it('findByTicketNumber should return a Ticket or null', async () => {
-    prismaMock.ticket.findFirst.mockResolvedValue({ uuid: 'abc', ticketNumber: 'TKT-2025-000001' });
-    const ticket = await repo.findByTicketNumber('TKT-2025-000001');
-    expect(ticket).toBeInstanceOf(Ticket);
-
     prismaMock.ticket.findFirst.mockResolvedValue(null);
-    const nullTicket = await repo.findByTicketNumber('unknown');
-    expect(nullTicket).toBeNull();
+    await expect(repo.findByTicketNumber('TKT-2025-000001')).rejects.toMatchObject({
+      name: 'NotFoundError',
+      message: 'The ticket TKT-2025-000001 was not found',
+    });
+    await expect(repo.findByTicketNumber('TKT-2025-000001')).rejects.toThrow('The ticket TKT-2025-000001 was not found');
+    expect(prismaMock.ticket.findFirst).toHaveBeenCalledWith({
+      where: { ticketNumber: 'TKT-2025-000001', active: true }
+    });
   });
 
   it('getNextSequenceNumber should return 1 if no tickets exist', async () => {

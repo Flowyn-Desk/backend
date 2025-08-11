@@ -3,6 +3,7 @@ import { Ticket } from "../../../domain/entities/Ticket.js";
 import type { ITicketRepository } from "../../../domain/repositories/ITicketRepository.js";
 import { BaseRepository } from "./BaseRepository.js";
 import { TicketStatus } from "../../../domain/enums/TicketStatus.js";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError.ts";
 
 export class TicketRepository extends BaseRepository<Ticket> implements ITicketRepository {
     constructor(prisma: PrismaClient) {
@@ -61,11 +62,14 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
         return records.map(record => this.mapToEntity(record));
     }
 
-    async findByTicketNumber(ticketNumber: string): Promise<Ticket | null> {
+    async findByTicketNumber(ticketNumber: string): Promise<Ticket> {
         const record = await this.prisma.ticket.findFirst({
             where: { ticketNumber, active: true },
         });
-        return record ? this.mapToEntity(record) : null;
+        if (!record){
+            throw new NotFoundError(`The ticket ${ticketNumber} was not found`)
+        }
+        return this.mapToEntity(record);
     }
 
     async getNextSequenceNumber(year: number, workspaceUuid: string): Promise<number> {
