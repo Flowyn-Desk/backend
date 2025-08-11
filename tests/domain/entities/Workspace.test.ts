@@ -14,4 +14,15 @@ describe('Workspace entity basic test', () => {
     expect(workspace.name).toBe(name);
     expect(workspace.createdBy).toBe(createdBy);
   });
+
+  it('should add a user ID to userIds array only if not already present', () => {
+    const workspace = new Workspace('key', 'name', 'creator');
+    expect(workspace.userIds).toEqual([]);
+    workspace.addUser('user-uuid-1');
+    expect(workspace.userIds).toEqual(['user-uuid-1']);
+    workspace.addUser('user-uuid-1');
+    expect(workspace.userIds).toEqual(['user-uuid-1']);
+    workspace.addUser('user-uuid-2');
+    expect(workspace.userIds).toEqual(['user-uuid-1', 'user-uuid-2']);
+  });
 });

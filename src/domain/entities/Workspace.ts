@@ -32,4 +32,10 @@ export class Workspace extends BaseEntity {
         this.createdBy = createdBy;
         this.userIds = userIds;
     }
+
+    addUser(userId: string): void {
+        if (!this.userIds.includes(userId)) {
+            this.userIds.push(userId);
+        }
+    }
 }
