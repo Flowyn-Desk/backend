@@ -6,7 +6,6 @@ import type { ServiceResponse } from "./ServiceResponse.js";
 
 export interface IUserService extends IBaseService<UserRequestDto, UserResponseDto> {
     getUserByEmail(email: string): Promise<ServiceResponse<UserResponseDto | null>>;
-    getUsersByRole(role: UserRole): Promise<ServiceResponse<Array<UserResponseDto>>>;
     getUsersByWorkspace(workspaceUuid: string): Promise<ServiceResponse<Array<UserResponseDto>>>;
     authenticateUser(email: string, password: string): Promise<ServiceResponse<UserResponseDto | null>>;
     validateUserPermissions(userUuid: string, requiredRole: UserRole): Promise<ServiceResponse<boolean>>;
