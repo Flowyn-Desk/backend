@@ -9,6 +9,20 @@ datasource db {
 }
 
 // ============================================
+// USER WORKSPACE JOIN MODEL
+// ============================================
+model UserWorkspace {
+  userUuid      String
+  workspaceUuid String
+
+  user      User      @relation(fields: [userUuid], references: [uuid])
+  workspace Workspace @relation(fields: [workspaceUuid], references: [uuid])
+
+  @@id([userUuid, workspaceUuid])
+  @@map("user_workspace")
+}
+
+// ============================================
 // WORKSPACE MODEL
 // ============================================
 model Workspace {
@@ -24,6 +38,8 @@ model Workspace {
   // Relations
   tickets       Ticket[]
   createdByUser User     @relation(fields: [createdBy], references: [uuid], onDelete: Restrict)
+
+  userWorkspaces UserWorkspace[]
 
   @@map("workspace")
   @@index([workspaceKey])
@@ -49,6 +65,8 @@ model User {
   createdTickets    Ticket[]        @relation("TicketCreator")
   ticketHistories   TicketHistory[]
   createdWorkspaces Workspace[]
+
+  userWorkspaces UserWorkspace[]
 
   @@map("user")
   @@index([email])

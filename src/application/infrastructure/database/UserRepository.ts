@@ -32,13 +32,13 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         const record = await this.prisma.user.findFirst({
             where: { email, active: true },
         });
-        if (!record){
+        if (!record) {
             throw new NotFoundError(`The user ${email} was not found`)
         }
         return this.mapToEntity(record);
     }
 
-    async findByRole(role: UserRole): Promise<User[]> {
+    async findByRole(role: UserRole): Promise<Array<User>> {
         const records: Array<any> = await this.prisma.user.findMany({
             where: { role, active: true },
         });
@@ -46,11 +46,16 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
     }
 
     async findByWorkspace(workspaceUuid: string): Promise<User[]> {
-        const records: Array<any> = await this.prisma.user.findMany({
+        const records = await this.prisma.user.findMany({
             where: {
-                createdWorkspaces: { some: { uuid: workspaceUuid, active: true } },
-                active: true,
-            },
+                userWorkspaces: {
+                    some: {
+                        workspaceUuid,
+                        workspace: { active: true }
+                    }
+                },
+                active: true
+            }
         });
         return records.map(record => this.mapToEntity(record));
     }

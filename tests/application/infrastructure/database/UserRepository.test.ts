@@ -53,13 +53,13 @@ describe('UserRepository', () => {
 
   it('findByEmail should throw not found error when user is not found', async () => {
     prismaMock.user.findFirst.mockResolvedValue(null);
-  
+
     await expect(repo.findByEmail('missing@provider.com')).rejects.toMatchObject({
       name: 'NotFoundError',
       message: 'The user missing@provider.com was not found',
     });
     await expect(repo.findByEmail('missing@provider.com')).rejects.toThrow('The user missing@provider.com was not found');
-  
+
     expect(prismaMock.user.findFirst).toHaveBeenCalledWith({
       where: { email: 'missing@provider.com', active: true }
     })
@@ -78,14 +78,21 @@ describe('UserRepository', () => {
 
   it('findByWorkspace should return an array of Users', async () => {
     prismaMock.user.findMany.mockResolvedValue([fakeRecord]);
+
     const result = await repo.findByWorkspace('workspace-uuid');
 
     expect(prismaMock.user.findMany).toHaveBeenCalledWith({
       where: {
-        createdWorkspaces: { some: { uuid: 'workspace-uuid', active: true } },
+        userWorkspaces: {
+          some: {
+            workspaceUuid: 'workspace-uuid',
+            workspace: { active: true }
+          }
+        },
         active: true,
       },
     });
+
     expect(result).toHaveLength(1);
     expect(result[0]).toBeInstanceOf(User);
   });

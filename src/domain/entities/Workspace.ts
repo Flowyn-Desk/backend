@@ -1,4 +1,4 @@
-import { IsString, IsUUID } from 'class-validator';
+import { IsArray, IsString, IsUUID } from 'class-validator';
 import { BaseEntity } from './BaseEntity.js';
 
 export class Workspace extends BaseEntity {
@@ -11,10 +11,15 @@ export class Workspace extends BaseEntity {
     @IsUUID()
     createdBy: string;
 
+    @IsArray()
+    @IsUUID("all", { each: true })
+    userIds: string[];
+
     constructor(
         workspaceKey: string,
         name: string,
         createdBy: string,
+        userIds: Array<string> = [],
         uuid?: string,
         createdAt?: Date,
         updatedAt?: Date,
@@ -25,5 +30,6 @@ export class Workspace extends BaseEntity {
         this.workspaceKey = workspaceKey;
         this.name = name;
         this.createdBy = createdBy;
+        this.userIds = userIds;
     }
 }
