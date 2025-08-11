@@ -89,7 +89,7 @@ export class TicketService extends BaseService<
         if (updates.status !== undefined) entity.status = updates.status;
         if (updates.severityChangeReason !== undefined) entity.severityChangeReason = updates.severityChangeReason;
         if (updates.dueDate !== undefined) entity.dueDate = updates.dueDate;
-        
+
         return entity;
     }
 
@@ -293,7 +293,7 @@ export class TicketService extends BaseService<
 
     async importTicketStatuses(csvContent: string): Promise<ServiceResponse<void>> {
         const updatedTicketsResponse = await this.updateCsvToTickets(csvContent);
-        
+
         return new ServiceResponse(
             StatusCodes.OK,
             undefined,
@@ -307,7 +307,7 @@ export class TicketService extends BaseService<
         }
 
         const historyResponse = await this.ticketHistoryService.findByTicket(ticketUuid);
-        
+
         return new ServiceResponse(
             StatusCodes.OK,
             historyResponse.payload,
@@ -373,6 +373,7 @@ export class TicketService extends BaseService<
 
         // Validate required columns
         const firstRow = csvData[0];
+        // @ts-ignore
         if (!('uuid' in firstRow) || !('status' in firstRow)) {
             throw new BadRequestError('CSV must contain uuid and status columns');
         }
@@ -432,16 +433,16 @@ export class TicketService extends BaseService<
 
     private async createHistoryRecord(uuid: string, userUuid: string, request: TicketRequestDto): Promise<void> {
         const ticketHistory: TicketHistoryRequestDto = {
-          ticketUuid: uuid,
-          userUuid: userUuid,
-          newStatus: request.status,
-          newSeverity: request.severity,
-          changeReason: request.severityChangeReason
+            ticketUuid: uuid,
+            userUuid: userUuid,
+            newStatus: request.status,
+            newSeverity: request.severity,
+            changeReason: request.severityChangeReason
         };
         await this.ticketHistoryService.create(ticketHistory);
-      }
-    
-    private createTicketResquestDtoFromTicket(ticket: Ticket){
+    }
+
+    private createTicketResquestDtoFromTicket(ticket: Ticket) {
         const ticketRequest: TicketRequestDto = {
             ticketNumber: ticket.ticketNumber,
             workspaceUuid: ticket.workspaceUuid,
@@ -452,7 +453,7 @@ export class TicketService extends BaseService<
             status: ticket.status,
             severityChangeReason: ticket.severityChangeReason || '',
             dueDate: ticket.dueDate
-          };
-          return ticketRequest;
+        };
+        return ticketRequest;
     }
 }
