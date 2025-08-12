@@ -1,18 +1,18 @@
 import { StatusCodes } from "http-status-codes";
-import { User } from "../../domain/entities/User.ts";
-import type { IUserRepository } from "../../domain/repositories/IUserRepository.ts";
-import type { IAuthService } from "../../domain/services/IAuthService.ts";
-import type { IUserService } from "../../domain/services/IUserService.ts";
-import { ValidationError } from "../../shared/Errors/ValidationError.ts";
-import type { UserRequestDto } from "../dto/user/UserRequestDto.ts";
-import type { UserResponseDto } from "../dto/user/UserResponseDto.ts";
-import { BaseService } from "./BaseService.ts";
-import type { ServiceResponse } from "../../domain/services/ServiceResponse.ts";
-import { ConflictError } from "../../shared/Errors/ConflictError.ts";
-import { ExpectationError } from "../../shared/Errors/ExpectationError.ts";
-import { UserRole } from "../../domain/enums/UserRole.ts";
-import { UnauthorizedError } from "../../shared/Errors/UnauthorizedError.ts";
-import { NotFoundError } from "../../shared/Errors/NotFoundError.ts";
+import { User } from "../../domain/entities/User";
+import type { IUserRepository } from "../../domain/repositories/IUserRepository";
+import type { IAuthService } from "../../domain/services/IAuthService";
+import type { IUserService } from "../../domain/services/IUserService";
+import { ValidationError } from "../../shared/Errors/ValidationError";
+import type { UserRequestDto } from "../dto/user/UserRequestDto";
+import type { UserResponseDto } from "../dto/user/UserResponseDto";
+import { BaseService } from "./BaseService";
+import type { ServiceResponse } from "../../domain/services/ServiceResponse";
+import { ConflictError } from "../../shared/Errors/ConflictError";
+import { ExpectationError } from "../../shared/Errors/ExpectationError";
+import { UserRole } from "../../domain/enums/UserRole";
+import { UnauthorizedError } from "../../shared/Errors/UnauthorizedError";
+import { NotFoundError } from "../../shared/Errors/NotFoundError";
 
 export class UserService extends BaseService<User, UserRequestDto, UserResponseDto, IUserRepository> implements IUserService {
 
@@ -72,11 +72,13 @@ export class UserService extends BaseService<User, UserRequestDto, UserResponseD
     }
 
     public async create(userDto: UserRequestDto): Promise<ServiceResponse<UserResponseDto>> {
-        const existingUser = await this.userRepository.findByEmail(userDto.email);
-        if (existingUser) {
+        let existingUser = null;
+        try{
+            existingUser = await this.userRepository.findByEmail(userDto.email);
+        }catch{}
+        if (existingUser != null) {
             throw new ConflictError(`There is already an user registered with the e-mail ${userDto.email}`)
         }
-
         const passwordHashResponse = await this.authService.hashPassword(userDto.password);
         if (!passwordHashResponse.payload) {
             throw new ExpectationError('Could not register, try later or contact our support')
@@ -115,7 +117,7 @@ export class UserService extends BaseService<User, UserRequestDto, UserResponseD
         };
     }
 
-    public async authenticateUser(email: string, password: string): Promise<ServiceResponse<UserResponseDto | null>> {
+    public async authenticateUser(email: string, password: string): Promise<ServiceResponse<string>> {
         let user;
         try {
             user = await this.userRepository.findByEmail(email);
@@ -131,11 +133,10 @@ export class UserService extends BaseService<User, UserRequestDto, UserResponseD
         if (!isPasswordCorrect.payload) {
             throw new UnauthorizedError('Invalid email or password.');
         }
-
-        const userResponseDto = this.toResponseDto(user);
+        const token: string = (await this.authService.generateToken(user)).payload
         return {
             httpStatusCode: StatusCodes.OK,
-            payload: userResponseDto,
+            payload: token,
             message: 'User authenticated successfully.',
         };
     }

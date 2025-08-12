@@ -4,12 +4,18 @@ import { StatusCodes } from 'http-status-codes';
 import type { IAuthService } from "../../domain/services/IAuthService.ts";
 import type { ServiceResponse } from "../../domain/services/ServiceResponse.ts";
 import type { UserResponseDto } from '../dto/user/UserResponseDto.ts';
+import { UserRole } from '../../domain/enums/UserRole.js';
 
 
 export class AuthService implements IAuthService {
     private readonly jwtSecret: string;
     private readonly jwtExpiresInSeconds: number;
     private readonly saltRounds: number = 10;
+    private static readonly roleHierarchy = {
+        [UserRole.ASSOCIATE]: 1,
+        [UserRole.MANAGER]: 2,
+        [UserRole.ADMIN]: 3,
+    };
 
     constructor() {
         if (!process.env.JWT_SECRET) {
@@ -18,7 +24,7 @@ export class AuthService implements IAuthService {
         if (!process.env.JWT_EXPIRES_IN_MINUTES) {
             throw new Error('JWT_EXPIRES_IN_MINUTES environment variable is not set.');
         }
-        
+
         this.jwtSecret = process.env.JWT_SECRET;
         this.jwtExpiresInSeconds = Number(process.env.JWT_EXPIRES_IN_MINUTES) * 60;
     }
@@ -78,7 +84,7 @@ export class AuthService implements IAuthService {
             };
 
             const secret: jwt.Secret = this.jwtSecret;
-            const signOptions: jwt.SignOptions = { expiresIn: this.jwtExpiresInSeconds};
+            const signOptions: jwt.SignOptions = { expiresIn: this.jwtExpiresInSeconds };
 
             const token = jwt.sign(payload, secret, signOptions);
             return {
@@ -99,7 +105,7 @@ export class AuthService implements IAuthService {
     /**
      * @inheritdoc
      */
-    public async verifyToken(token: string): Promise<ServiceResponse<UserResponseDto | null>> {
+    public verifyToken(token: string): ServiceResponse<UserResponseDto | null> {
         try {
             const secret: jwt.Secret = this.jwtSecret;
             const decoded = jwt.verify(token, secret) as UserResponseDto;
@@ -128,6 +134,40 @@ export class AuthService implements IAuthService {
                 httpStatusCode: StatusCodes.INTERNAL_SERVER_ERROR,
                 payload: null,
                 message: 'Failed to verify token.'
+            };
+        }
+    }
+
+    public userHasAccess(token: string, requiredRole: UserRole): ServiceResponse<boolean> {
+        try {
+            if (token?.startsWith('Bearer ')) {
+                token = token.slice(7).trim();
+            }
+            const verifyResult = this.verifyToken(token);
+            if (!verifyResult.payload) {
+                return {
+                    httpStatusCode: verifyResult.httpStatusCode,
+                    payload: false,
+                    message: verifyResult.message,
+                };
+            }
+
+            const user: UserResponseDto = verifyResult.payload;
+            const userRoleValue = AuthService.roleHierarchy[user.role];
+            const requiredRoleValue = AuthService.roleHierarchy[requiredRole];
+
+            const hasAccess = userRoleValue >= requiredRoleValue;
+            return {
+                httpStatusCode: hasAccess ? StatusCodes.OK : StatusCodes.FORBIDDEN,
+                payload: hasAccess,
+                message: hasAccess ? 'User has required access.' : 'User does not have required access.',
+            };
+        } catch (error) {
+            console.error('Error checking user access:', error);
+            return {
+                httpStatusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+                payload: false,
+                message: 'Failed to verify user access.',
             };
         }
     }
