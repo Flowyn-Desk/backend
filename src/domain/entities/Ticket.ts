@@ -19,10 +19,6 @@ export class Ticket extends BaseEntity {
     @IsString()
     description: string;
 
-    @IsOptional()
-    @IsString()
-    category: string | undefined;
-
     @IsEnum(TicketSeverity)
     severity: TicketSeverity;
 
@@ -45,7 +41,6 @@ export class Ticket extends BaseEntity {
         severity: TicketSeverity,
         status: TicketStatus,
         dueDate: Date,
-        category?: string | undefined,
         severityChangeReason?: string | undefined,
         uuid?: string,
         createdAt?: Date,
@@ -59,7 +54,6 @@ export class Ticket extends BaseEntity {
         this.createdByUuid = createdByUuid;
         this.title = title;
         this.description = description;
-        this.category = category;
         this.severity = severity;
         this.status = status;
         this.severityChangeReason = severityChangeReason;
