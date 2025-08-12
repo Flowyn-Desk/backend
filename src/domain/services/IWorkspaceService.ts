@@ -1,7 +1,7 @@
-import type { WorkspaceRequestDto } from "../../application/dto/workspace/WorkspaceRequestDto";
-import type { WorkspaceResponseDto } from "../../application/dto/workspace/WorkspaceResponseDto";
-import type { IBaseService } from "./IBaseService";
-import type { ServiceResponse } from "./ServiceResponse";
+import type { WorkspaceRequestDto } from "../../application/dto/workspace/WorkspaceRequestDto.js";
+import type { WorkspaceResponseDto } from "../../application/dto/workspace/WorkspaceResponseDto.js";
+import type { IBaseService } from "./IBaseService.js";
+import type { ServiceResponse } from "./ServiceResponse.js";
 
 export interface IWorkspaceService extends IBaseService<WorkspaceRequestDto, WorkspaceResponseDto> {
     getWorkspaceByKey(workspaceKey: string): Promise<ServiceResponse<WorkspaceResponseDto>>;

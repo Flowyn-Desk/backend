@@ -1,6 +1,6 @@
-import type { UserRole } from "../../../generated/prisma/index";
-import type { UserResponseDto } from "../../application/dto/user/UserResponseDto";
-import type { ServiceResponse } from "./ServiceResponse";
+import type { UserRole } from "../../../generated/prisma/index.js";
+import type { UserResponseDto } from "../../application/dto/user/UserResponseDto.js";
+import type { ServiceResponse } from "./ServiceResponse.js";
 
 export interface IAuthService {
     hashPassword(password: string): Promise<ServiceResponse<string>>;

@@ -1,5 +1,6 @@
+import 'reflect-metadata';
 import { IsArray, IsString, IsUUID } from 'class-validator';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntity } from './BaseEntity.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Workspace extends BaseEntity {

@@ -1,9 +1,9 @@
 import type { PrismaClient } from "@prisma/client";
-import { Ticket } from "../../../domain/entities/Ticket";
-import type { ITicketRepository } from "../../../domain/repositories/ITicketRepository";
-import { BaseRepository } from "./BaseRepository";
-import { TicketStatus } from "../../../domain/enums/TicketStatus";
-import { NotFoundError } from "../../../shared/Errors/NotFoundError";
+import { Ticket } from "../../../domain/entities/Ticket.js";
+import type { ITicketRepository } from "../../../domain/repositories/ITicketRepository.js";
+import { BaseRepository } from "./BaseRepository.js";
+import { TicketStatus } from "../../../domain/enums/TicketStatus.js";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError.js";
 
 export class TicketRepository extends BaseRepository<Ticket> implements ITicketRepository {
     constructor(prisma: PrismaClient) {

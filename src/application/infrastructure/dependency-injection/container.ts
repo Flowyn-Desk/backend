@@ -1,15 +1,16 @@
-import { PrismaClient } from "../../../../generated/prisma/client";
-import { UserRepository } from "../database/UserRepository";
-import { TicketRepository } from "../database/TicketRepository";
-import { TicketHistoryRepository } from "../database/TicketHistoryRepository";
-import { WorkspaceRepository } from "../database/WorkspaceRepository";
-import { IaService } from "../../services/IaService";
-import { AuthService } from "../../services/AuthService";
-import { UserService } from "../../services/UserService";
-import { TicketHistoryService } from "../../services/TicketHistoryService";
-import { TicketService } from "../../services/TIcketService";
-import { WorkspaceService } from "../../services/WorkspaceService";
-import { getRouteMetadata } from "../web/decorators/RouteDecorators";
+import 'reflect-metadata';
+import { PrismaClient } from "../../../../generated/prisma/client.js";
+import { UserRepository } from "../database/UserRepository.js";
+import { TicketRepository } from "../database/TicketRepository.js";
+import { TicketHistoryRepository } from "../database/TicketHistoryRepository.js";
+import { WorkspaceRepository } from "../database/WorkspaceRepository.js";
+import { IaService } from "../../services/IaService.js";
+import { AuthService } from "../../services/AuthService.js";
+import { UserService } from "../../services/UserService.js";
+import { TicketHistoryService } from "../../services/TicketHistoryService.js";
+import { TicketService } from "../../services/TIcketService.js";
+import { WorkspaceService } from "../../services/WorkspaceService.js";
+import { getRouteMetadata } from "../web/decorators/RouteDecorators.js";
 import { NextFunction } from "express";
 import type { Express } from 'express';
 

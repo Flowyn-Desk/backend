@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { BaseError } from "./BaseError";
+import { BaseError } from "./BaseError.js";
 
 export class ExpectationError extends BaseError {
     constructor(message: string = '') {

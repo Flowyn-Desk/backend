@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "noEmitOnError": false,
+    "useDefineForClassFields": false,
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "node",

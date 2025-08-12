@@ -1,7 +1,7 @@
-import type { ServiceResponse } from "./ServiceResponse";
-import type { IBaseService } from "./IBaseService";
-import type { TicketHistoryRequestDto } from "../../application/dto/ticket_history/TicketHistoryRequestDto";
-import type { TicketHistoryResponseDto } from "../../application/dto/ticket_history/TicketHistoryResponseDto";
+import type { ServiceResponse } from "./ServiceResponse.js";
+import type { IBaseService } from "./IBaseService.js";
+import type { TicketHistoryRequestDto } from "../../application/dto/ticket_history/TicketHistoryRequestDto.js";
+import type { TicketHistoryResponseDto } from "../../application/dto/ticket_history/TicketHistoryResponseDto.js";
 
 
 export interface ITicketHistoryService extends IBaseService<TicketHistoryRequestDto, TicketHistoryResponseDto> {

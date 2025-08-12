@@ -1,13 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
-import { TicketHistory } from '../../domain/entities/TicketHistory';
-import type { ITicketHistoryRepository } from '../../domain/repositories/ITicketHistoryRepository';
-import { BaseService } from './BaseService';
-import { ServiceResponse } from '../../domain/services/ServiceResponse';
-import type { TicketHistoryRequestDto } from '../dto/ticket_history/TicketHistoryRequestDto';
-import type { TicketHistoryResponseDto } from '../dto/ticket_history/TicketHistoryResponseDto';
-import type { ITicketRepository } from '../../domain/repositories/ITicketRepository';
-import { ConflictError } from '../../shared/Errors/ConflictError';
-import { BadRequestError } from '../../shared/Errors/BadRequestError';
+import { TicketHistory } from '../../domain/entities/TicketHistory.js';
+import type { ITicketHistoryRepository } from '../../domain/repositories/ITicketHistoryRepository.js';
+import { BaseService } from './BaseService.js';
+import { ServiceResponse } from '../../domain/services/ServiceResponse.js';
+import type { TicketHistoryRequestDto } from '../dto/ticket_history/TicketHistoryRequestDto.js';
+import type { TicketHistoryResponseDto } from '../dto/ticket_history/TicketHistoryResponseDto.js';
+import type { ITicketRepository } from '../../domain/repositories/ITicketRepository.js';
+import { ConflictError } from '../../shared/Errors/ConflictError.js';
+import { BadRequestError } from '../../shared/Errors/BadRequestError.js';
 
 export class TicketHistoryService extends BaseService<
     TicketHistory,

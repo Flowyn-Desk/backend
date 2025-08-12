@@ -1,6 +1,7 @@
+import 'reflect-metadata';
 import {IsEmail, IsEnum, IsString} from "class-validator";
-import { BaseEntity } from "./BaseEntity";
-import { UserRole } from "../enums/UserRole";
+import { BaseEntity } from "./BaseEntity.js";
+import { UserRole } from "../enums/UserRole.js";
 
 export class User extends BaseEntity {
 

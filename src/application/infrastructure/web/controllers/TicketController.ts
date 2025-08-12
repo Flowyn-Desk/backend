@@ -1,7 +1,7 @@
-import { ITicketService } from "../../../../domain/services/ITicketService";
-import { Container } from "../../dependecy-injection/container";
-import { Get, Post } from "../decorators/RouteDecorators";
-import { BaseController } from "./BaseController";
+import { ITicketService } from "../../../../domain/services/ITicketService.js";
+import { Container } from "../../dependency-injection/container.js";
+import { Get, Post } from "../decorators/RouteDecorators.js";
+import { BaseController } from "./BaseController.js";
 import type { Request, Response } from "express";
 
 export class TicketController extends BaseController{

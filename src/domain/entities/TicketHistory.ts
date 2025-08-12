@@ -1,7 +1,8 @@
+import 'reflect-metadata';
 import { IsUUID, IsEnum, IsOptional, IsString} from 'class-validator';
-import { BaseEntity } from './BaseEntity';
-import { TicketStatus } from '../enums/TicketStatus';
-import { TicketSeverity } from '../enums/TicketSeverity';
+import { BaseEntity } from './BaseEntity.js';
+import { TicketStatus } from '../enums/TicketStatus.js';
+import { TicketSeverity } from '../enums/TicketSeverity.js';
 
 export class TicketHistory extends BaseEntity {
     @IsUUID()

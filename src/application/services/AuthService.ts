@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
-import type { IAuthService } from "../../domain/services/IAuthService";
-import type { ServiceResponse } from "../../domain/services/ServiceResponse";
-import type { UserResponseDto } from '../dto/user/UserResponseDto';
-import { UserRole } from '../../domain/enums/UserRole';
+import type { IAuthService } from "../../domain/services/IAuthService.js";
+import type { ServiceResponse } from "../../domain/services/ServiceResponse.js";
+import type { UserResponseDto } from '../dto/user/UserResponseDto.js';
+import { UserRole } from '../../domain/enums/UserRole.js';
 
 
 export class AuthService implements IAuthService {

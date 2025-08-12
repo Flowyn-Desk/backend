@@ -1,7 +1,7 @@
-import type { PrismaClient } from "../../../../generated/prisma/client";
-import type { BaseEntity } from "../../../domain/entities/BaseEntity";
-import type { IBaseRepository } from "../../../domain/repositories/IBaseRepository";
-import { NotFoundError } from "../../../shared/Errors/NotFoundError";
+import type { PrismaClient } from "../../../../generated/prisma/client.js";
+import type { BaseEntity } from "../../../domain/entities/BaseEntity.js";
+import type { IBaseRepository } from "../../../domain/repositories/IBaseRepository.js";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError.js";
 
 export abstract class BaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
     protected readonly prisma: PrismaClient;

@@ -1,5 +1,5 @@
-import type { UserRole } from "../../../domain/enums/UserRole";
-import type { BaseResponseDto } from "../BaseResponseDto";
+import type { UserRole } from "../../../domain/enums/UserRole.js";
+import type { BaseResponseDto } from "../BaseResponseDto.js";
 
 export interface UserResponseDto extends BaseResponseDto {
     email: string;

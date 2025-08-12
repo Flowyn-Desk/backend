@@ -1,6 +1,6 @@
 import type { Response } from 'express';
-import { ServiceResponse } from '../../../../domain/services/ServiceResponse';
-import { Logger } from '../../../../shared/Logger';
+import { ServiceResponse } from '../../../../domain/services/ServiceResponse.js';
+import { Logger } from '../../../../shared/Logger.js';
 
 export abstract class BaseController {
 

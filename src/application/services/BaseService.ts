@@ -1,11 +1,11 @@
-import type { BaseResponseDto } from "../../application/dto/BaseResponseDto";
+import type { BaseResponseDto } from "../../application/dto/BaseResponseDto.js";
 import { StatusCodes } from 'http-status-codes';
-import { BaseError } from "../../shared/Errors/BaseError";
-import { ServiceExceptionCatcher } from "./ServiceExceptionCatcher";
-import type { BaseEntity } from "../../domain/entities/BaseEntity";
-import type { IBaseService } from "../../domain/services/IBaseService";
-import type { IBaseRepository } from "../../domain/repositories/IBaseRepository";
-import { ServiceResponse } from "../../domain/services/ServiceResponse";
+import { BaseError } from "../../shared/Errors/BaseError.js";
+import { ServiceExceptionCatcher } from "./ServiceExceptionCatcher.js";
+import type { BaseEntity } from "../../domain/entities/BaseEntity.js";
+import type { IBaseService } from "../../domain/services/IBaseService.js";
+import type { IBaseRepository } from "../../domain/repositories/IBaseRepository.js";
+import { ServiceResponse } from "../../domain/services/ServiceResponse.js";
 
 export abstract class BaseService<
     TEntity extends BaseEntity,

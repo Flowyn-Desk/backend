@@ -1,7 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
-import { Workspace } from "../../../domain/entities/Workspace";
-import type { IWorkspaceRepository } from "../../../domain/repositories/IWorkspaceRepository";
-import { BaseRepository } from "./BaseRepository";
+import { Workspace } from "../../../domain/entities/Workspace.js";
+import type { IWorkspaceRepository } from "../../../domain/repositories/IWorkspaceRepository.js";
+import { BaseRepository } from "./BaseRepository.js";
 
 export class WorkspaceRepository extends BaseRepository<Workspace> implements IWorkspaceRepository {
     constructor(prisma: PrismaClient) {

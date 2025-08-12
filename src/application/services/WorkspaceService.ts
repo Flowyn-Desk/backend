@@ -1,14 +1,14 @@
 import { StatusCodes } from 'http-status-codes';
-import { BaseService } from './BaseService';
-import type { IWorkspaceRepository } from '../../domain/repositories/IWorkspaceRepository';
-import type { IWorkspaceService } from '../../domain/services/IWorkspaceService';
-import type { WorkspaceRequestDto } from '../../application/dto/workspace/WorkspaceRequestDto';
-import type { WorkspaceResponseDto } from '../../application/dto/workspace/WorkspaceResponseDto';
-import { ServiceResponse } from '../../domain/services/ServiceResponse';
-import { Workspace } from '../../domain/entities/Workspace';
-import { BadRequestError } from '../../shared/Errors/BadRequestError';
-import { NotFoundError } from '../../shared/Errors/NotFoundError';
-import { ForbiddenError } from '../../shared/Errors/ForbiddenError';
+import { BaseService } from './BaseService.js';
+import type { IWorkspaceRepository } from '../../domain/repositories/IWorkspaceRepository.js';
+import type { IWorkspaceService } from '../../domain/services/IWorkspaceService.js';
+import type { WorkspaceRequestDto } from '../../application/dto/workspace/WorkspaceRequestDto.js';
+import type { WorkspaceResponseDto } from '../../application/dto/workspace/WorkspaceResponseDto.js';
+import { ServiceResponse } from '../../domain/services/ServiceResponse.js';
+import { Workspace } from '../../domain/entities/Workspace.js';
+import { BadRequestError } from '../../shared/Errors/BadRequestError.js';
+import { NotFoundError } from '../../shared/Errors/NotFoundError.js';
+import { ForbiddenError } from '../../shared/Errors/ForbiddenError.js';
 
 export class WorkspaceService extends BaseService<
     Workspace,

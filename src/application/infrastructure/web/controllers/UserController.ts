@@ -1,8 +1,8 @@
-import { UserRole } from "../../../../domain/enums/UserRole";
-import type { IUserService } from "../../../../domain/services/IUserService";
-import type { Container } from "../../dependecy-injection/container";
-import { Get, Post, RequireRole } from "../decorators/RouteDecorators";
-import { BaseController } from "./BaseController";
+import { UserRole } from "../../../../domain/enums/UserRole.js";
+import type { IUserService } from "../../../../domain/services/IUserService.js";
+import type { Container } from "../../dependency-injection/container.js";
+import { Get, Post, RequireRole } from "../decorators/RouteDecorators.js";
+import { BaseController } from "./BaseController.js";
 import type { Request, Response } from "express";
 
 

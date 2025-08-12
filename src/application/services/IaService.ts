@@ -1,9 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import type { IAiService } from "../../domain/services/IAiService";
-import { TicketSeverity } from "../../domain/enums/TicketSeverity";
-import { ServiceResponse } from "../../domain/services/ServiceResponse";
-import { Logger } from "../../shared/Logger";
+import type { IAiService } from "../../domain/services/IAiService.js";
+import { TicketSeverity } from "../../domain/enums/TicketSeverity.js";
+import { ServiceResponse } from "../../domain/services/ServiceResponse.js";
+import { Logger } from "../../shared/Logger.js";
 
 export class IaService implements IAiService {
     private readonly client: GoogleGenerativeAI;
@@ -24,6 +24,7 @@ export class IaService implements IAiService {
         title: string,
         description: string
     ): Promise<ServiceResponse<TicketSeverity>> {
+        
         this.logger.logInfo('Suggesting a new severity');
         const prompt = `
 You are an AI assistant helping to categorize support tickets by severity. Based on the ticket title and description below, suggest the most appropriate severity level from this list:

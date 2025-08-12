@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { Container } from "../../dependecy-injection/container";
-import type { IWorkspaceService } from "../../../../domain/services/IWorkspaceService";
-import { Get, Post } from "../decorators/RouteDecorators";
-import { BaseController } from "./BaseController";
+import { Container } from "../../dependency-injection/container.js";
+import type { IWorkspaceService } from "../../../../domain/services/IWorkspaceService.js";
+import { Get, Post } from "../decorators/RouteDecorators.js";
+import { BaseController } from "./BaseController.js";
 
 export class WorkspaceController extends BaseController {
     private readonly workspaceService: IWorkspaceService;

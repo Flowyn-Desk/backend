@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { UserRole } from '../../../../domain/enums/UserRole';
+import { UserRole } from '../../../../domain/enums/UserRole.js';
 
 const routeMetadata: RouteMetadata[] = [];
 const pendingMiddlewares = new Map<string, Function[]>();

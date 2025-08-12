@@ -1,5 +1,5 @@
-import type { BaseResponseDto } from "../../application/dto/BaseResponseDto";
-import type { ServiceResponse } from "./ServiceResponse";
+import type { BaseResponseDto } from "../../application/dto/BaseResponseDto.js";
+import type { ServiceResponse } from "./ServiceResponse.js";
 
 export interface IBaseService<TRequestDTO, TResponseDTO extends BaseResponseDto> {
     create(request: TRequestDTO): Promise<ServiceResponse<TResponseDTO>>;

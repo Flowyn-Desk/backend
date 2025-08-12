@@ -1,8 +1,8 @@
-import type { UserRequestDto } from "../../application/dto/user/UserRequestDto";
-import type { UserResponseDto } from "../../application/dto/user/UserResponseDto";
-import type { UserRole } from "../enums/UserRole";
-import type { IBaseService } from "./IBaseService";
-import type { ServiceResponse } from "./ServiceResponse";
+import type { UserRequestDto } from "../../application/dto/user/UserRequestDto.js";
+import type { UserResponseDto } from "../../application/dto/user/UserResponseDto.js";
+import type { UserRole } from "../enums/UserRole.js";
+import type { IBaseService } from "./IBaseService.js";
+import type { ServiceResponse } from "./ServiceResponse.js";
 
 export interface IUserService extends IBaseService<UserRequestDto, UserResponseDto> {
     getUserByEmail(email: string): Promise<ServiceResponse<UserResponseDto | null>>;

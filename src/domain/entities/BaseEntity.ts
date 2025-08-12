@@ -1,7 +1,8 @@
+import 'reflect-metadata';
 import { v4 as uuidv4 } from 'uuid';
 import { Type, plainToInstance, instanceToPlain } from 'class-transformer';
 import { IsUUID, IsDate, IsOptional, IsBoolean, validateSync, ValidationError as ClassValidatorError } from 'class-validator';
-import { ValidationError } from '../../shared/Errors/ValidationError';
+import { ValidationError } from '../../shared/Errors/ValidationError.js';
 
 export abstract class BaseEntity {
     @IsUUID()
@@ -18,7 +19,7 @@ export abstract class BaseEntity {
     @IsOptional()
     @Type(() => Date)
     @IsDate()
-    deletedAt?: Date | undefined;
+    deletedAt?: Date | undefined = undefined;
 
     @IsBoolean()
     active: boolean;
@@ -89,8 +90,11 @@ export abstract class BaseEntity {
         throw new ValidationError(messages || 'Validation failed');
     }
 
-    protected parseDate(input: string | Date): Date | null {
-        if (!input || input instanceof Date) {
+    protected parseDate(input: string | Date): Date{
+        if (!input) {
+            return new Date();
+        }
+        if (input instanceof Date) {
             return input;
         }
         if (typeof input === 'string') {

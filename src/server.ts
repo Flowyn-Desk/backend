@@ -3,10 +3,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
-import { Container } from './application/infrastructure/dependecy-injection/container';
-import { UserController } from './application/infrastructure/web/controllers/UserController';
-import { WorkspaceController } from './application/infrastructure/web/controllers/WorkspaceController';
-import { TicketController } from './application/infrastructure/web/controllers/TicketController';
+import { Container } from './application/infrastructure/dependency-injection/container.js';
+import { UserController } from './application/infrastructure/web/controllers/UserController.js';
+import { WorkspaceController } from './application/infrastructure/web/controllers/WorkspaceController.js';
+import { TicketController } from './application/infrastructure/web/controllers/TicketController.js';
 
 dotenv.config();
 

@@ -1,17 +1,17 @@
 import { StatusCodes } from "http-status-codes";
-import { User } from "../../domain/entities/User";
-import type { IUserRepository } from "../../domain/repositories/IUserRepository";
-import type { IAuthService } from "../../domain/services/IAuthService";
-import type { IUserService } from "../../domain/services/IUserService";
-import { ValidationError } from "../../shared/Errors/ValidationError";
-import type { UserRequestDto } from "../dto/user/UserRequestDto";
-import type { UserResponseDto } from "../dto/user/UserResponseDto";
-import { BaseService } from "./BaseService";
-import type { ServiceResponse } from "../../domain/services/ServiceResponse";
-import { ConflictError } from "../../shared/Errors/ConflictError";
-import { ExpectationError } from "../../shared/Errors/ExpectationError";
-import { UserRole } from "../../domain/enums/UserRole";
-import { UnauthorizedError } from "../../shared/Errors/UnauthorizedError";
+import { User } from "../../domain/entities/User.js";
+import type { IUserRepository } from "../../domain/repositories/IUserRepository.js";
+import type { IAuthService } from "../../domain/services/IAuthService.js";
+import type { IUserService } from "../../domain/services/IUserService.js";
+import { ValidationError } from "../../shared/Errors/ValidationError.js";
+import type { UserRequestDto } from "../dto/user/UserRequestDto.js";
+import type { UserResponseDto } from "../dto/user/UserResponseDto.js";
+import { BaseService } from "./BaseService.js";
+import type { ServiceResponse } from "../../domain/services/ServiceResponse.js";
+import { ConflictError } from "../../shared/Errors/ConflictError.js";
+import { ExpectationError } from "../../shared/Errors/ExpectationError.js";
+import { UserRole } from "../../domain/enums/UserRole.js";
+import { UnauthorizedError } from "../../shared/Errors/UnauthorizedError.js";
 
 
 export class UserService extends BaseService<User, UserRequestDto, UserResponseDto, IUserRepository> implements IUserService {
