@@ -1,4 +1,5 @@
 import { IsString, IsUUID, IsEnum, IsOptional, IsDate } from 'class-validator';
+import { Type } from 'class-transformer';
 import { BaseEntity } from './BaseEntity.js';
 import { TicketSeverity } from '../enums/TicketSeverity.js';
 import { TicketStatus } from '../enums/TicketStatus.js';
@@ -30,6 +31,7 @@ export class Ticket extends BaseEntity {
     severityChangeReason: string | undefined;
 
     @IsDate()
+    @Type(() => Date)
     dueDate: Date;
 
     constructor(
@@ -57,7 +59,7 @@ export class Ticket extends BaseEntity {
         this.severity = severity;
         this.status = status;
         this.severityChangeReason = severityChangeReason;
-        this.dueDate = dueDate;
+        this.dueDate = this.parseDate(dueDate);
     }
 
     static generateTicketNumber(year: number, sequence: number): string {

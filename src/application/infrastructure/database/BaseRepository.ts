@@ -1,7 +1,7 @@
-import type { PrismaClient } from "../../../../generated/prisma/client.js";
-import type { BaseEntity } from "../../../domain/entities/BaseEntity.js";
-import type { IBaseRepository } from "../../../domain/repositories/IBaseRepository.js";
-import { NotFoundError } from "../../../shared/Errors/NotFoundError.ts";
+import type { PrismaClient } from "../../../../generated/prisma/client";
+import type { BaseEntity } from "../../../domain/entities/BaseEntity";
+import type { IBaseRepository } from "../../../domain/repositories/IBaseRepository";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError";
 
 export abstract class BaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
     protected readonly prisma: PrismaClient;
@@ -55,4 +55,18 @@ export abstract class BaseRepository<T extends BaseEntity> implements IBaseRepos
     protected abstract getModelName(): string;
 
     protected abstract mapToEntity(record: any): T;
+
+    protected parseDate(input: string | Date): Date {
+        if (input instanceof Date) {
+            return input;
+        }
+        if (typeof input === 'string') {
+            const parsed = new Date(input);
+            if (isNaN(parsed.getTime())) {
+                throw new Error(`Invalid date string: ${input}`);
+            }
+            return parsed;
+        }
+        throw new Error('Input must be a Date or an ISO date string');
+    }
 }

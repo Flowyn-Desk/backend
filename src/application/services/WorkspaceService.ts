@@ -140,4 +140,18 @@ export class WorkspaceService extends BaseService<
 
         return new ServiceResponse(StatusCodes.OK, workspace.userIds ?? [], `Retrieved members of workspace ${workspaceUuid}`);
     }
+
+    async getWorkspacesFromUser(userUuid: string): Promise<ServiceResponse<Array<WorkspaceResponseDto>>> {
+        if (!this.isValidUuid(userUuid)) {
+            throw new BadRequestError('Invalid UUID format');
+        }
+        const workspaces = await this.repository.findByUserUuid(userUuid);
+        const responseDtos = workspaces.map(workspace => this.toResponseDto(workspace));
+    
+        return new ServiceResponse(
+            StatusCodes.OK,
+            responseDtos,
+            `Found ${responseDtos.length} workspace(s) for user ${userUuid}`
+        );
+    }
 }

@@ -3,7 +3,7 @@ import { Ticket } from "../../../domain/entities/Ticket.js";
 import type { ITicketRepository } from "../../../domain/repositories/ITicketRepository.js";
 import { BaseRepository } from "./BaseRepository.js";
 import { TicketStatus } from "../../../domain/enums/TicketStatus.js";
-import { NotFoundError } from "../../../shared/Errors/NotFoundError.ts";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError";
 
 export class TicketRepository extends BaseRepository<Ticket> implements ITicketRepository {
     constructor(prisma: PrismaClient) {
@@ -11,7 +11,7 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
     }
 
     protected getModelName(): string {
-        return 'tickets';
+        return 'ticket';
     }
 
     protected mapToEntity(record: any): Ticket {
@@ -22,11 +22,10 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
             createdByUuid: record.createdByUuid,
             title: record.title,
             description: record.description,
-            category: record.category,
             severity: record.severity,
             status: record.status,
             severityChangeReason: record.severityChangeReason,
-            dueDate: record.dueDate,
+            dueDate: record.dueDate instanceof Date ? record.dueDate : new Date(record.dueDate),
             createdAt: record.createdAt,
             updatedAt: record.updatedAt,
             deletedAt: record.deletedAt,
@@ -34,9 +33,9 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
         });
     }
 
-    async findByStatus(status: TicketStatus): Promise<Ticket[]> {
+    async findByStatus(workspaceUuid: string, status: TicketStatus): Promise<Ticket[]> {
         const records: Array<any> = await this.prisma.ticket.findMany({
-            where: { status, active: true },
+            where: { status, active: true, workspaceUuid},
         });
         return records.map(record => this.mapToEntity(record));
     }
@@ -116,6 +115,19 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
         });
         const records: Array<any> = await this.prisma.ticket.findMany({
             where: { uuid: { in: ticketUuids }, active: true },
+        });
+        return records.map(record => this.mapToEntity(record));
+    }
+
+    async findAllByWorkspaceId(workspaceUuid: string): Promise<Array<Ticket>> {
+        const records: Array<any> = await this.prisma.ticketHistory.findMany({
+            where: {
+                active: true,
+                ticket: {
+                    workspaceUuid
+                }
+            },
+            orderBy: { createdAt: 'desc' },
         });
         return records.map(record => this.mapToEntity(record));
     }

@@ -28,7 +28,6 @@ describe('TicketService', () => {
         TicketSeverity.LOW,
         TicketStatus.DRAFT,
         new Date('2024-12-31T00:00:00Z'),
-        'Test Category',
         undefined,
         mockTicketUuid
     );
@@ -249,7 +248,6 @@ describe('TicketService', () => {
                 TicketSeverity.MEDIUM,
                 TicketStatus.DRAFT,
                 new Date('2024-12-31T00:00:00Z'),
-                'Test Category',
                 undefined,
                 mockTicketUuid,
             );
@@ -277,7 +275,6 @@ describe('TicketService', () => {
                 TicketSeverity.LOW,
                 TicketStatus.DRAFT,
                 new Date('2024-12-31T00:00:00Z'),
-                'Test Category',
                 undefined,
                 mockTicketUuid,
             );
@@ -312,7 +309,6 @@ describe('TicketService', () => {
                 TicketSeverity.LOW,
                 TicketStatus.DRAFT,
                 new Date('2024-12-31T00:00:00Z'),
-                'Test Category',
                 undefined,
                 mockTicketUuid,
             );
@@ -334,7 +330,6 @@ describe('TicketService', () => {
                 TicketSeverity.LOW,
                 TicketStatus.REVIEW,
                 new Date('2024-12-31T00:00:00Z'),
-                'Test Category',
                 mockTicketUuid,
             );
             ticketRepositoryMock.findByUuid.mockResolvedValue(reviewTicket);

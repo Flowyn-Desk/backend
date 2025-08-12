@@ -68,7 +68,7 @@ export abstract class BaseEntity {
         this: new (...args: any[]) => T,
         json: object
     ): T {
-        return plainToInstance(this, json);
+        return plainToInstance(this, json, { enableImplicitConversion: true });
     }
 
     /**
@@ -87,5 +87,19 @@ export abstract class BaseEntity {
             .join('; ');
 
         throw new ValidationError(messages || 'Validation failed');
+    }
+
+    protected parseDate(input: string | Date): Date | null {
+        if (!input || input instanceof Date) {
+            return input;
+        }
+        if (typeof input === 'string') {
+            const parsed = new Date(input);
+            if (isNaN(parsed.getTime())) {
+                throw new Error(`Invalid date string: ${input}`);
+            }
+            return parsed;
+        }
+        throw new Error('Input must be a Date or an ISO date string');
     }
 }

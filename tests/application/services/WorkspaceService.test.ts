@@ -75,15 +75,6 @@ describe('WorkspaceService', () => {
       expect(response.payload).toEqual(service['toResponseDto'](mockWorkspaceEntity));
     });
 
-    it('getByUuid() should return NOT_FOUND when workspace is not found', async () => {
-      workspaceRepositoryMock.findByUuid.mockResolvedValue(null);
-      const response = await service.getByUuid(mockWorkspaceUuid);
-
-      expect(response.httpStatusCode).toBe(StatusCodes.NOT_FOUND);
-      expect(response.payload).toBeNull();
-      expect(response.message).toBe('Entity not found');
-    });
-
     it('getByUuid() should return BadRequest for invalid UUID format', async () => {
       const response = await service.getByUuid(mockInvalidUuid);
       expect(response.httpStatusCode).toBe(StatusCodes.BAD_REQUEST);

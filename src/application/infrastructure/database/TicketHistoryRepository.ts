@@ -9,7 +9,7 @@ export class TicketHistoryRepository extends BaseRepository<TicketHistory> imple
     }
 
     protected getModelName(): string {
-        return 'ticket_history';
+        return 'ticketHistory';
     }
 
     protected mapToEntity(record: any): TicketHistory {

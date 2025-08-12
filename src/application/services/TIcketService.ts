@@ -102,18 +102,31 @@ export class TicketService extends BaseService<
         const entity = this.toEntity(request);
         entity.validate();
         const createdEntity = await this.repository.create(entity);
-
         await this.createHistoryRecord(
             createdEntity.uuid,
             request.createdByUuid,
             request
         );
 
+
         const responseDto = this.toResponseDto(createdEntity);
         return new ServiceResponse(
             StatusCodes.CREATED,
             responseDto,
             `Ticket ${responseDto.ticketNumber} created successfully`
+        );
+    }
+
+    async getAllByWorkspaceId(workspaceUuid: string): Promise<ServiceResponse<Array<TicketResponseDto>>> {
+        if (!this.isValidUuid(workspaceUuid)) {
+            throw new BadRequestError('Invalid creator UUID format');
+        }
+        const tickets = await this.repository.findAllByWorkspaceId(workspaceUuid);
+        const responseDtos = tickets.map(ticket => this.toResponseDto(ticket));
+        return new ServiceResponse(
+            StatusCodes.OK,
+            responseDtos,
+            `Found ${responseDtos.length} from the workspace ${workspaceUuid}`
         );
     }
 
@@ -130,8 +143,8 @@ export class TicketService extends BaseService<
         );
     }
 
-    async getTicketsByStatus(status: TicketStatus): Promise<ServiceResponse<TicketResponseDto[]>> {
-        const tickets = await this.repository.findByStatus(status);
+    async getTicketsByStatus(workspaceUuid: string, status: TicketStatus): Promise<ServiceResponse<TicketResponseDto[]>> {
+        const tickets = await this.repository.findByStatus(workspaceUuid, status);
         const responseDtos = tickets.map(ticket => this.toResponseDto(ticket));
 
         return new ServiceResponse(
@@ -270,8 +283,8 @@ export class TicketService extends BaseService<
         return await this.aiService.suggestSeverity(title, description)
     }
 
-    async exportPendingTickets(): Promise<ServiceResponse<string>> {
-        const pendingTicketsResponse = await this.getTicketsByStatus(TicketStatus.PENDING);
+    async exportPendingTickets(workspaceUuid: string): Promise<ServiceResponse<string>> {
+        const pendingTicketsResponse = await this.getTicketsByStatus(workspaceUuid, TicketStatus.PENDING);
         const pendingTickets = pendingTicketsResponse.payload;
 
         if (pendingTickets.length === 0) {
@@ -317,13 +330,9 @@ export class TicketService extends BaseService<
 
     async exportTicketsToCsv(tickets: Ticket[]): Promise<ServiceResponse<string>> {
         if (tickets.length === 0) {
-            return new ServiceResponse(
-                StatusCodes.OK,
-                '',
-                'No tickets to export'
-            );
+            return new ServiceResponse(StatusCodes.OK, '', 'No tickets to export');
         }
-
+    
         const ticketsData = tickets.map(ticket => ({
             uuid: ticket.uuid,
             ticketNumber: ticket.ticketNumber,
@@ -336,85 +345,86 @@ export class TicketService extends BaseService<
             dueDate: ticket.dueDate.toISOString(),
             createdAt: ticket.createdAt.toISOString()
         }));
-
+    
         const csvContent = Papa.unparse(ticketsData, {
             header: true,
-            skipEmptyLines: true
+            skipEmptyLines: true,
+            delimiter: ',',
+            quotes: false  // only quote when necessary
         });
-
+    
         return new ServiceResponse(
             StatusCodes.OK,
             csvContent,
             `Exported ${tickets.length} tickets to CSV`
         );
     }
-
+    
     async updateCsvToTickets(csvContent: string): Promise<ServiceResponse<Array<TicketResponseDto>>> {
         if (!csvContent.trim()) {
             throw new BadRequestError('CSV content cannot be empty');
         }
-
-        // Parse CSV using Papa Parse
+    
         const parseResult = Papa.parse(csvContent, {
             header: true,
             skipEmptyLines: true,
-            transformHeader: (header: string) => header.trim()
+            delimiter: ',',   // expect comma
+            transformHeader: h => h.trim(),
+            dynamicTyping: false
         });
-
+    
         if (parseResult.errors.length > 0) {
             throw new BadRequestError(`CSV parsing errors: ${parseResult.errors.map(e => e.message).join(', ')}`);
         }
-
+    
         const csvData = parseResult.data as Array<Record<string, string>>;
-
+    
         if (csvData.length === 0) {
             throw new BadRequestError('CSV must contain at least one data row');
         }
-
-        // Validate required columns
+    
         const firstRow = csvData[0];
-        // @ts-ignore
         if (!('uuid' in firstRow) || !('status' in firstRow)) {
             throw new BadRequestError('CSV must contain uuid and status columns');
         }
-
+    
         const updatedTickets: TicketResponseDto[] = [];
-
+    
         for (const row of csvData) {
             const ticketUuid = row.uuid?.trim();
             const newStatus = row.status?.trim() as TicketStatus;
-
-            // Skip invalid rows
+    
             if (!ticketUuid || !newStatus) {
                 continue;
             }
-
+    
             if (!this.isValidUuid(ticketUuid)) {
-                continue; // Skip invalid UUIDs
+                continue;
             }
-
+    
             if (!Object.values(TicketStatus).includes(newStatus)) {
-                continue; // Skip invalid statuses
+                continue;
             }
-
+    
             try {
                 const ticket = await this.repository.findByUuid(ticketUuid);
                 if (!ticket || !ticket.active) {
                     continue;
                 }
-
+    
                 const currentStatus = ticket.status;
                 if (currentStatus !== newStatus) {
                     ticket.status = newStatus;
                     ticket.markUpdated();
-                    const ticketRequest = this.createTicketResquestDtoFromTicket(ticket)
-                    ticketRequest.severityChangeReason = 'Updated by CSV import'
+    
+                    const ticketRequest = this.createTicketResquestDtoFromTicket(ticket);
+                    ticketRequest.severityChangeReason = 'Updated by CSV import';
                     await this.createHistoryRecord(
                         ticketUuid,
                         ticket.createdByUuid,
                         ticketRequest
                     );
-
+    
                     const updatedTicket = await this.repository.update(ticketUuid, ticket);
                     updatedTickets.push(this.toResponseDto(updatedTicket));
                 }
@@ -423,14 +433,14 @@ export class TicketService extends BaseService<
                 continue;
             }
         }
-
+    
         return new ServiceResponse(
             StatusCodes.OK,
             updatedTickets,
             `Successfully updated ${updatedTickets.length} tickets from CSV import`
         );
     }
-
+    
     private async createHistoryRecord(uuid: string, userUuid: string, request: TicketRequestDto): Promise<void> {
         const ticketHistory: TicketHistoryRequestDto = {
             ticketUuid: uuid,

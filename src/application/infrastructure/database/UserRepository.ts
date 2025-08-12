@@ -1,9 +1,9 @@
-import { User } from "../../../domain/entities/User.js";
-import type { IUserRepository } from "../../../domain/repositories/IUserRepository.js";
-import { BaseRepository } from "./BaseRepository.js";
-import type { UserRole } from "../../../domain/enums/UserRole.js";
-import type { PrismaClient } from "../../../../generated/prisma/client.js";
-import { NotFoundError } from "../../../shared/Errors/NotFoundError.ts";
+import { User } from "../../../domain/entities/User";
+import type { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import { BaseRepository } from "./BaseRepository";
+import type { UserRole } from "../../../domain/enums/UserRole";
+import type { PrismaClient } from "../../../../generated/prisma/client";
+import { NotFoundError } from "../../../shared/Errors/NotFoundError";
 
 export class UserRepository extends BaseRepository<User> implements IUserRepository {
     constructor(prisma: PrismaClient) {

@@ -15,7 +15,6 @@ describe('Ticket Entity', () => {
         severity: TicketSeverity.MEDIUM,
         status: TicketStatus.DRAFT,
         dueDate: new Date('2024-12-31'),
-        category: 'Bug',
         severityChangeReason: 'Initial severity assessment'
     };
 
@@ -40,7 +39,6 @@ describe('Ticket Entity', () => {
             expect(ticket.severity).toBe(validTicketData.severity);
             expect(ticket.status).toBe(validTicketData.status);
             expect(ticket.dueDate).toBe(validTicketData.dueDate);
-            expect(ticket.category).toBeUndefined();
             expect(ticket.severityChangeReason).toBeUndefined();
         });
 
@@ -54,11 +52,8 @@ describe('Ticket Entity', () => {
                 validTicketData.severity,
                 validTicketData.status,
                 validTicketData.dueDate,
-                validTicketData.category,
                 validTicketData.severityChangeReason
             );
-
-            expect(ticket.category).toBe(validTicketData.category);
             expect(ticket.severityChangeReason).toBe(validTicketData.severityChangeReason);
         });
 
@@ -78,7 +73,6 @@ describe('Ticket Entity', () => {
                 validTicketData.severity,
                 validTicketData.status,
                 validTicketData.dueDate,
-                undefined,
                 undefined,
                 uuid,
                 createdAt,
@@ -106,7 +100,6 @@ describe('Ticket Entity', () => {
                 validTicketData.severity,
                 validTicketData.status,
                 validTicketData.dueDate,
-                validTicketData.category,
                 validTicketData.severityChangeReason
             );
 

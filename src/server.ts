@@ -5,6 +5,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { Container } from './application/infrastructure/dependecy-injection/container';
 import { UserController } from './application/infrastructure/web/controllers/UserController'; // Add your controllers
+import { WorkspaceController } from './application/infrastructure/web/controllers/WorkspaceController';
+import { TicketController } from './application/infrastructure/web/controllers/TicketController';
 
 dotenv.config();
 
@@ -36,7 +38,9 @@ app.get('/', (req, res) => {
 
 // Register decorator-based routes AFTER middleware
 const userController = new UserController(container);
-container.registerRoutes(app, [userController]);
+const workspaceController = new WorkspaceController(container);
+const ticketController = new TicketController(container);
+container.registerRoutes(app, [userController, workspaceController, ticketController]);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

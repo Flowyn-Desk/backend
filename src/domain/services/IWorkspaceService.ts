@@ -8,4 +8,5 @@ export interface IWorkspaceService extends IBaseService<WorkspaceRequestDto, Wor
     addUserToWorkspace(workspaceUuid: string, userUuid: string): Promise<ServiceResponse<void>>;
     removeUserFromWorkspace(workspaceUuid: string, userUuid: string): Promise<ServiceResponse<void>>;
     getWorkspaceMembers(workspaceUuid: string): Promise<ServiceResponse<Array<string>>>;
+    getWorkspacesFromUser(userUuid: string): Promise<ServiceResponse<Array<WorkspaceResponseDto>>>;
 }

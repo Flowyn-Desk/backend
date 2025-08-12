@@ -1,5 +1,6 @@
 import { IsArray, IsString, IsUUID } from 'class-validator';
 import { BaseEntity } from './BaseEntity.js';
+import { v4 as uuidv4 } from 'uuid';
 
 export class Workspace extends BaseEntity {
     @IsUUID()
@@ -31,6 +32,9 @@ export class Workspace extends BaseEntity {
         this.name = name;
         this.createdBy = createdBy;
         this.userIds = userIds;
+        if (this.workspaceKey === undefined){
+            this.workspaceKey = uuidv4();
+        }
     }
 
     addUser(userId: string): void {

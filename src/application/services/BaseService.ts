@@ -1,11 +1,11 @@
-import type { BaseResponseDto } from "../../application/dto/BaseResponseDto.js";
+import type { BaseResponseDto } from "../../application/dto/BaseResponseDto";
 import { StatusCodes } from 'http-status-codes';
-import { BaseError } from "../../shared/Errors/BaseError.js";
-import { ServiceExceptionCatcher } from "./ServiceExceptionCatcher.js";
-import type { BaseEntity } from "../../domain/entities/BaseEntity.ts";
-import type { IBaseService } from "../../domain/services/IBaseService.ts";
-import type { IBaseRepository } from "../../domain/repositories/IBaseRepository.ts";
-import { ServiceResponse } from "../../domain/services/ServiceResponse.ts";
+import { BaseError } from "../../shared/Errors/BaseError";
+import { ServiceExceptionCatcher } from "./ServiceExceptionCatcher";
+import type { BaseEntity } from "../../domain/entities/BaseEntity";
+import type { IBaseService } from "../../domain/services/IBaseService";
+import type { IBaseRepository } from "../../domain/repositories/IBaseRepository";
+import { ServiceResponse } from "../../domain/services/ServiceResponse";
 
 export abstract class BaseService<
     TEntity extends BaseEntity,
@@ -120,5 +120,19 @@ export abstract class BaseService<
     protected isValidUuid(uuid: string): boolean {
         const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
         return uuidRegex.test(uuid);
+    }
+
+    protected parseDate(input: string | Date): Date {
+        if (input instanceof Date) {
+            return input;
+        }
+        if (typeof input === 'string') {
+            const parsed = new Date(input);
+            if (isNaN(parsed.getTime())) {
+                throw new Error(`Invalid date string: ${input}`);
+            }
+            return parsed;
+        }
+        throw new Error('Input must be a Date or an ISO date string');
     }
 }

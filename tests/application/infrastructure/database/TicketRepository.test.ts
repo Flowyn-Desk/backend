@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { Ticket } from '../../../../src/domain/entities/Ticket.js';
-import { TicketStatus } from '../../../../src/domain/enums/TicketStatus.js';
-import { TicketRepository } from '../../../../src/application/infrastructure/database/TicketRepository.ts';
+import { Ticket } from '../../../../src/domain/entities/Ticket';
+import { TicketStatus } from '../../../../src/domain/enums/TicketStatus';
+import { TicketRepository } from '../../../../src/application/infrastructure/database/TicketRepository';
 
 describe('TicketRepository', () => {
   let prismaMock: any;
@@ -27,7 +27,6 @@ describe('TicketRepository', () => {
       createdByUuid: 'user-1',
       title: 'Test',
       description: 'Desc',
-      category: 'Bug',
       severity: 'HIGH',
       status: TicketStatus.PENDING,
       severityChangeReason: null,

@@ -13,17 +13,30 @@ export class WorkspaceRepository extends BaseRepository<Workspace> implements IW
     }
 
     protected mapToEntity(record: any): Workspace {
-        return new Workspace(
-            record.workspace_key,
-            record.name,
-            record.created_by,
-            [],
-            record.uuid,
-            record.created_at,
-            record.updated_at,
-            record.deleted_at,
-            record.active,
+        return Workspace.fromJson(
+            record
         );
+    }
+
+    async create(entity: Workspace): Promise<Workspace> {
+        const data = entity.toJson();
+        const userIds = data.userIds ?? [];
+        delete data.userIds;
+        const created = await this.prisma.workspace.create({
+            data: {
+                ...data,
+                userWorkspaces: {
+                    create: userIds.map(userUuid => ({ userUuid })),
+                },
+            },
+            include: {
+                userWorkspaces: true,
+            },
+        });
+        const workspace = this.mapToEntity(created);
+        workspace.userIds = created.userWorkspaces?.map(uw => uw.userUuid) ?? [];
+    
+        return workspace;
     }
 
     async findByCreatedBy(createdByUuid: string): Promise<Workspace[]> {
@@ -35,11 +48,32 @@ export class WorkspaceRepository extends BaseRepository<Workspace> implements IW
 
     async findByWorkspaceKey(workspaceKey: string): Promise<Workspace | null> {
         const record = await this.prisma.workspace.findUnique({
-            where: { workspaceKey: workspaceKey },
+        where: { workspaceKey: workspaceKey },
         });
         if (!record || !record.active) {
             return null;
         }
         return this.mapToEntity(record);
+    }
+
+    async findByUserUuid(userUuid: string): Promise<Workspace[]> {
+        const records: Array<any> = await this.prisma.workspace.findMany({
+            where: {
+                active: true,
+                OR: [
+                    { createdBy: userUuid },
+                    { userWorkspaces: { some: { userUuid } } }
+                ]
+            },
+            include: {
+                userWorkspaces: true
+            }
+        });
+    
+        return records.map(record => {
+            const workspace = this.mapToEntity(record);
+            workspace.userIds = record.userWorkspaces?.map(userWorkspace => userWorkspace.userUuid) ?? [];
+            return workspace;
+        });
     }
 }

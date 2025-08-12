@@ -1,12 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import type { IAiService } from "../../domain/services/IAiService.ts";
-import { TicketSeverity } from "../../domain/enums/TicketSeverity.ts";
-import { ServiceResponse } from "../../domain/services/ServiceResponse.ts";
+import type { IAiService } from "../../domain/services/IAiService";
+import { TicketSeverity } from "../../domain/enums/TicketSeverity";
+import { ServiceResponse } from "../../domain/services/ServiceResponse";
+import { Logger } from "../../shared/Logger";
 
 export class IaService implements IAiService {
     private readonly client: GoogleGenerativeAI;
     private readonly model: string;
+    private readonly logger: Logger;
 
     constructor() {
         const apiKey = process.env.GOOGLE_API_KEY;
@@ -14,13 +16,15 @@ export class IaService implements IAiService {
             throw new Error("GOOGLE_API_KEY environment variable is not set.");
         }
         this.client = new GoogleGenerativeAI(apiKey);
-        this.model = "gemini-pro";
+        this.model = "gemini-1.5-flash";
+        this.logger = new Logger('IaService')
     }
 
     async suggestSeverity(
         title: string,
         description: string
     ): Promise<ServiceResponse<TicketSeverity>> {
+        this.logger.logInfo('Suggesting a new severity');
         const prompt = `
 You are an AI assistant helping to categorize support tickets by severity. Based on the ticket title and description below, suggest the most appropriate severity level from this list:
 
@@ -55,14 +59,14 @@ Suggested Severity:
                     "AI returned invalid severity, using fallback"
                 );
             }
-
+            this.logger.logInfo(`The suggested severity is ${severity}`);
             return new ServiceResponse(
                 StatusCodes.OK,
                 severity,
                 "AI severity suggestion successful"
             );
         } catch (error) {
-            console.error("Google AI call failed:", (error as Error).message);
+            this.logger.logError(`Google AI call failed: ${(error as Error).message}`);
             const fallback = this.getRandomSeverity();
             return new ServiceResponse(
                 StatusCodes.OK,
