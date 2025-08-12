@@ -24,7 +24,7 @@ RUN npm run build
 
 # Expose the port your app runs on
 EXPOSE 8080
-
+ENV PORT=8080
 # Set the command to run the built application
 # The 'npm start' script executes 'node dist/server.js'
 CMD [ "npm", "start" ]
