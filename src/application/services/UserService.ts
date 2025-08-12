@@ -12,7 +12,7 @@ import { ConflictError } from "../../shared/Errors/ConflictError";
 import { ExpectationError } from "../../shared/Errors/ExpectationError";
 import { UserRole } from "../../domain/enums/UserRole";
 import { UnauthorizedError } from "../../shared/Errors/UnauthorizedError";
-import { NotFoundError } from "../../shared/Errors/NotFoundError";
+
 
 export class UserService extends BaseService<User, UserRequestDto, UserResponseDto, IUserRepository> implements IUserService {
 

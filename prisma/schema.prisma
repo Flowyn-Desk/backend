@@ -12,8 +12,8 @@ datasource db {
 // USER WORKSPACE JOIN MODEL
 // ============================================
 model UserWorkspace {
-  userUuid      String
-  workspaceUuid String
+  userUuid      String  @db.Uuid
+  workspaceUuid String  @db.Uuid
 
   user      User      @relation(fields: [userUuid], references: [uuid])
   workspace Workspace @relation(fields: [workspaceUuid], references: [uuid])
@@ -84,7 +84,6 @@ model Ticket {
   createdByUuid         String         @map("created_by_uuid") @db.Uuid
   title                 String         @db.VarChar(500)
   description           String         @db.Text
-  category              String?        @db.VarChar(100)
   severity              TicketSeverity
   status                TicketStatus   @default(DRAFT)
   severityChangeReason  String?        @map("severity_change_reason") @db.Text
