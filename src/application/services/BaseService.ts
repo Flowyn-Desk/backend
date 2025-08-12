@@ -45,19 +45,11 @@ export abstract class BaseService<
         );
     }
 
-    async getByUuid(uuid: string): Promise<ServiceResponse<TResponseDTO | null>> {
+    async getByUuid(uuid: string): Promise<ServiceResponse<TResponseDTO>> {
         if (!this.isValidUuid(uuid)) {
             throw new BaseError('Invalid UUID format', StatusCodes.BAD_REQUEST);
         }
-
         const entity = await this.repository.findByUuid(uuid);
-        if (!entity || !entity.active) {
-            return new ServiceResponse(
-                StatusCodes.NOT_FOUND,
-                null,
-                'Entity not found'
-            );
-        }
 
         const responseDto = this.toResponseDto(entity);
         return new ServiceResponse(
