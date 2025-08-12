@@ -23,7 +23,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Expose the port your app runs on
-EXPOSE 3000
+EXPOSE 8080
 
 # Set the command to run the built application
 # The 'npm start' script executes 'node dist/server.js'
