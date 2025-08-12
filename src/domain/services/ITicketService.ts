@@ -1,11 +1,11 @@
-import type { TicketRequestDto } from "../../application/dto/ticket/TicketRequestDto.js";
-import type { TicketResponseDto } from "../../application/dto/ticket/TicketResponseDto.js";
-import type { TicketHistoryResponseDto } from "../../application/dto/ticket_history/TicketHistoryResponseDto.ts";
+import type { TicketRequestDto } from "../../application/dto/ticket/TicketRequestDto";
+import type { TicketResponseDto } from "../../application/dto/ticket/TicketResponseDto";
+import type { TicketHistoryResponseDto } from "../../application/dto/ticket_history/TicketHistoryResponseDto";
 import type { Ticket } from "../entities/Ticket.ts";
-import type { TicketSeverity } from "../enums/TicketSeverity.js";
-import type { TicketStatus } from "../enums/TicketStatus.js";
-import type { IBaseService } from "./IBaseService.js";
-import type { ServiceResponse } from "./ServiceResponse.js";
+import type { TicketSeverity } from "../enums/TicketSeverity";
+import type { TicketStatus } from "../enums/TicketStatus";
+import type { IBaseService } from "./IBaseService";
+import type { ServiceResponse } from "./ServiceResponse";
 
 export interface ITicketService extends IBaseService<TicketRequestDto, TicketResponseDto> {
     create(request: TicketRequestDto): Promise<ServiceResponse<TicketResponseDto>>;

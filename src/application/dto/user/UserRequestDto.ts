@@ -1,4 +1,4 @@
-import type { UserRole } from "../../../domain/enums/UserRole.js";
+import type { UserRole } from "../../../domain/enums/UserRole";
 
 export interface UserRequestDto {
     email: string;

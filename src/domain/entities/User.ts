@@ -1,6 +1,6 @@
 import {IsEmail, IsEnum, IsString} from "class-validator";
-import { BaseEntity } from "./BaseEntity.js";
-import { UserRole } from "../enums/UserRole.js";
+import { BaseEntity } from "./BaseEntity";
+import { UserRole } from "../enums/UserRole";
 
 export class User extends BaseEntity {
 

@@ -1,21 +1,21 @@
 import { StatusCodes } from 'http-status-codes';
 import Papa from 'papaparse';
-import { Ticket } from '../../domain/entities/Ticket.js';
-import type { ITicketRepository } from '../../domain/repositories/ITicketRepository.js';
-import type { ITicketHistoryService } from '../../domain/services/ITicketHistoryService.js';
-import type { ITicketService } from '../../domain/services/ITicketService.js';
-import { BaseService } from './BaseService.js';
-import { ServiceResponse } from '../../domain/services/ServiceResponse.js';
-import type { TicketRequestDto } from '../dto/ticket/TicketRequestDto.js';
-import type { TicketResponseDto } from '../dto/ticket/TicketResponseDto.js';
-import { TicketSeverity } from '../../domain/enums/TicketSeverity.js';
-import { TicketStatus } from '../../domain/enums/TicketStatus.js';
-import { ConflictError } from '../../shared/Errors/ConflictError.js';
-import { BadRequestError } from '../../shared/Errors/BadRequestError.js';
-import { ForbiddenError } from '../../shared/Errors/ForbiddenError.js';
-import type { TicketHistoryResponseDto } from '../dto/ticket_history/TicketHistoryResponseDto.ts';
-import type { TicketHistoryRequestDto } from '../dto/ticket_history/TicketHistoryRequestDto.ts'
-import type { IAiService } from '../../domain/services/IAiService.ts';
+import { Ticket } from '../../domain/entities/Ticket';
+import type { ITicketRepository } from '../../domain/repositories/ITicketRepository';
+import type { ITicketHistoryService } from '../../domain/services/ITicketHistoryService';
+import type { ITicketService } from '../../domain/services/ITicketService';
+import { BaseService } from './BaseService';
+import { ServiceResponse } from '../../domain/services/ServiceResponse';
+import type { TicketRequestDto } from '../dto/ticket/TicketRequestDto';
+import type { TicketResponseDto } from '../dto/ticket/TicketResponseDto';
+import { TicketSeverity } from '../../domain/enums/TicketSeverity';
+import { TicketStatus } from '../../domain/enums/TicketStatus';
+import { ConflictError } from '../../shared/Errors/ConflictError';
+import { BadRequestError } from '../../shared/Errors/BadRequestError';
+import { ForbiddenError } from '../../shared/Errors/ForbiddenError';
+import type { TicketHistoryResponseDto } from '../dto/ticket_history/TicketHistoryResponseDto';
+import type { TicketHistoryRequestDto } from '../dto/ticket_history/TicketHistoryRequestDto'
+import type { IAiService } from '../../domain/services/IAiService';
 
 export class TicketService extends BaseService<
     Ticket,

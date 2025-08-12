@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import { Container } from './application/infrastructure/dependecy-injection/container';
-import { UserController } from './application/infrastructure/web/controllers/UserController'; // Add your controllers
+import { UserController } from './application/infrastructure/web/controllers/UserController';
 import { WorkspaceController } from './application/infrastructure/web/controllers/WorkspaceController';
 import { TicketController } from './application/infrastructure/web/controllers/TicketController';
 
@@ -13,14 +13,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Apply middleware FIRST
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
 
 const container = new Container();
 
-// Register your existing routes
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
@@ -36,7 +34,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// Register decorator-based routes AFTER middleware
 const userController = new UserController(container);
 const workspaceController = new WorkspaceController(container);
 const ticketController = new TicketController(container);

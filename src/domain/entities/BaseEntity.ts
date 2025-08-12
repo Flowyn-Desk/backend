@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Type, plainToInstance, instanceToPlain } from 'class-transformer';
 import { IsUUID, IsDate, IsOptional, IsBoolean, validateSync, ValidationError as ClassValidatorError } from 'class-validator';
-import { ValidationError } from '../../shared/Errors/ValidationError.js';
+import { ValidationError } from '../../shared/Errors/ValidationError';
 
 export abstract class BaseEntity {
     @IsUUID()

@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
-import { Logger } from '../../shared/Logger.js';
-import { ServiceResponse } from '../../domain/services/ServiceResponse.js';
-import { BaseError } from '../../shared/Errors/BaseError.js';
+import { Logger } from '../../shared/Logger';
+import { ServiceResponse } from '../../domain/services/ServiceResponse';
+import { BaseError } from '../../shared/Errors/BaseError';
 
 export class ServiceExceptionCatcher {
     private readonly serviceName: string;

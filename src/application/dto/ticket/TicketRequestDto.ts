@@ -1,5 +1,5 @@
-import type { TicketSeverity } from "../../../domain/enums/TicketSeverity.js";
-import type { TicketStatus } from "../../../domain/enums/TicketStatus.js";
+import type { TicketSeverity } from "../../../domain/enums/TicketSeverity";
+import type { TicketStatus } from "../../../domain/enums/TicketStatus";
 
 export interface TicketRequestDto {
   ticketNumber: string;

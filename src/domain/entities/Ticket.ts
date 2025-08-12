@@ -1,8 +1,8 @@
 import { IsString, IsUUID, IsEnum, IsOptional, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
-import { BaseEntity } from './BaseEntity.js';
-import { TicketSeverity } from '../enums/TicketSeverity.js';
-import { TicketStatus } from '../enums/TicketStatus.js';
+import { BaseEntity } from './BaseEntity';
+import { TicketSeverity } from '../enums/TicketSeverity';
+import { TicketStatus } from '../enums/TicketStatus';
 
 export class Ticket extends BaseEntity {
     @IsString()

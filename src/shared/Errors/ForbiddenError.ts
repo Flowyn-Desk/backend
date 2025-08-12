@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { BaseError } from "./BaseError.ts";
+import { BaseError } from "./BaseError";
 
 export class ForbiddenError extends BaseError {
     constructor(message: string = 'Access forbidden') {

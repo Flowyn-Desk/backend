@@ -1,7 +1,7 @@
-import type { PrismaClient } from "../../../../generated/prisma/client.js";
-import { TicketHistory } from "../../../domain/entities/TicketHistory.js";
-import type { ITicketHistoryRepository } from "../../../domain/repositories/ITicketHistoryRepository.js";
-import { BaseRepository } from "./BaseRepository.js";
+import type { PrismaClient } from "../../../../generated/prisma/client";
+import { TicketHistory } from "../../../domain/entities/TicketHistory";
+import type { ITicketHistoryRepository } from "../../../domain/repositories/ITicketHistoryRepository";
+import { BaseRepository } from "./BaseRepository";
 
 export class TicketHistoryRepository extends BaseRepository<TicketHistory> implements ITicketHistoryRepository {
     constructor(prisma: PrismaClient) {

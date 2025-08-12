@@ -1,5 +1,5 @@
 import { IsArray, IsString, IsUUID } from 'class-validator';
-import { BaseEntity } from './BaseEntity.js';
+import { BaseEntity } from './BaseEntity';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Workspace extends BaseEntity {

@@ -1,6 +1,6 @@
-import type { TicketSeverity } from "../../../domain/enums/TicketSeverity.js";
-import type { TicketStatus } from "../../../domain/enums/TicketStatus.js";
-import type { BaseResponseDto } from "../BaseResponseDto.js";
+import type { TicketSeverity } from "../../../domain/enums/TicketSeverity";
+import type { TicketStatus } from "../../../domain/enums/TicketStatus";
+import type { BaseResponseDto } from "../BaseResponseDto";
 
 export interface TicketResponseDto extends BaseResponseDto {
   ticketNumber: string;

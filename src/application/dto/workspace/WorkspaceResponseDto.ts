@@ -1,4 +1,4 @@
-import type { BaseResponseDto } from "../BaseResponseDto.js";
+import type { BaseResponseDto } from "../BaseResponseDto";
 
 export interface WorkspaceResponseDto extends BaseResponseDto {
     workspaceKey: string;

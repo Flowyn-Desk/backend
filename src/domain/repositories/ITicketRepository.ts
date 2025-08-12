@@ -1,6 +1,6 @@
-import { Ticket } from '../entities/Ticket.js';
-import { TicketStatus } from '../enums/TicketStatus.js';
-import type { IBaseRepository } from './IBaseRepository.js';
+import { Ticket } from '../entities/Ticket';
+import { TicketStatus } from '../enums/TicketStatus';
+import type { IBaseRepository } from './IBaseRepository';
 
 export interface ITicketRepository extends IBaseRepository<Ticket> {
     findByStatus(workspaceUuid: string, status: TicketStatus): Promise<Array<Ticket>>;
