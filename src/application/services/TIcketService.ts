@@ -16,6 +16,7 @@ import { ForbiddenError } from '../../shared/Errors/ForbiddenError.js';
 import type { TicketHistoryResponseDto } from '../dto/ticket_history/TicketHistoryResponseDto.js';
 import type { TicketHistoryRequestDto } from '../dto/ticket_history/TicketHistoryRequestDto.js'
 import type { IAiService } from '../../domain/services/IAiService.js';
+import { setFlagsFromString } from 'v8';
 
 export class TicketService extends BaseService<
     Ticket,
@@ -49,6 +50,7 @@ export class TicketService extends BaseService<
         this.getTicketHistory = this.exceptionCatcher.wrapMethod(this.getTicketHistory.bind(this), 'getTicketHistory');
         this.exportTicketsToCsv = this.exceptionCatcher.wrapMethod(this.exportTicketsToCsv.bind(this), 'exportTicketsToCsv');
         this.updateCsvToTickets = this.exceptionCatcher.wrapMethod(this.updateCsvToTickets.bind(this), 'updateCsvToTickets');
+        this.approveTicket = this.exceptionCatcher.wrapMethod(this.approveTicket.bind(this), 'approveTicket');
     }
 
     protected toResponseDto(entity: Ticket): TicketResponseDto {
@@ -93,6 +95,24 @@ export class TicketService extends BaseService<
         return entity;
     }
 
+    async approveTicket(ticketUuid: string, managerUuid: string): Promise<ServiceResponse<TicketResponseDto>> {
+        let ticket: Ticket = await this.repository.findByUuid(ticketUuid);
+        ticket.status = TicketStatus.PENDING;
+        const ticketRequest = this.createTicketResquestDtoFromTicket(ticket);
+        await this.createHistoryRecord(
+            ticket.uuid,
+            managerUuid,
+            ticketRequest
+        )
+        await this.repository.update(ticket.uuid, ticket);
+        const responseDto = this.toResponseDto(ticket);
+        return new ServiceResponse(
+            StatusCodes.OK,
+            responseDto,
+            `Ticket ${responseDto.ticketNumber} created successfully`
+        );
+    }
+
     async create(request: TicketRequestDto): Promise<ServiceResponse<TicketResponseDto>> {
         const currentYear = new Date().getFullYear();
         const sequence = await this.repository.getNextSequenceNumber(currentYear, request.workspaceUuid);
@@ -107,7 +127,6 @@ export class TicketService extends BaseService<
             request.createdByUuid,
             request
         );
-
 
         const responseDto = this.toResponseDto(createdEntity);
         return new ServiceResponse(

@@ -21,5 +21,6 @@ export interface ITicketService extends IBaseService<TicketRequestDto, TicketRes
     importTicketStatuses(csvContent: string): Promise<ServiceResponse<void>>;
     getTicketHistory(ticketUuid: string): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>>;
     exportTicketsToCsv(tickets: Array<Ticket>): Promise<ServiceResponse<string>>;
-    updateCsvToTickets(csvContent: string): Promise<ServiceResponse<Array<TicketResponseDto>>>
+    updateCsvToTickets(csvContent: string): Promise<ServiceResponse<Array<TicketResponseDto>>>;
+    approveTicket(ticketUuid: string, managerUuid: string): Promise<ServiceResponse<TicketResponseDto>>;
 }

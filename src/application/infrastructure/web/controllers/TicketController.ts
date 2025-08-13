@@ -71,6 +71,16 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @Post('/ticket/approve')
+    async approveTicket(req: Request, res: Response): Promise<void> {
+        this.logger.logInfo(`Request received on ${req.path}`);
+        const { ticketUuid, managerUuid } = req.body;
+        const serviceResponse = await this.ticketService.approveTicket(ticketUuid, managerUuid);
+        this.handleResponse(res, serviceResponse);
+        this.logger.logInfo(serviceResponse.message);
+        this.logger.logInfo(`Request finished on ${req.path}`);
+    }
+
     @Post('/ticket/update-details')
     async updateTicketDetails(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);
