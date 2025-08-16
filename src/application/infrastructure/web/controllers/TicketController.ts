@@ -1,8 +1,9 @@
+import { UserRole } from "../../../../domain/enums/UserRole.js";
 import { ITicketService } from "../../../../domain/services/ITicketService.js";
 import { Container } from "../../dependency-injection/container.js";
-import { Get, Post } from "../decorators/RouteDecorators.js";
+import { Get, Post, RequireRole } from "../decorators/RouteDecorators.js";
 import { BaseController } from "./BaseController.js";
-import type { Request, Response } from "express";
+import type { Request, Response  } from "express";
 
 export class TicketController extends BaseController{
     private readonly ticketService: ITicketService;
@@ -12,6 +13,7 @@ export class TicketController extends BaseController{
         this.ticketService = container.getService('ITicketService')
     }
 
+    @RequireRole(UserRole.ASSOCIATE)
     @Post('/ticket')
     async createTicket(req: Request, res: Response): Promise<void>{
         this.logger.logInfo(`Request received on ${req.path}`);
@@ -21,6 +23,7 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @RequireRole(UserRole.ASSOCIATE)
     @Get('/ticket/get-all/:workspaceUuid')
     async getAll(req: Request, res: Response): Promise<void>{
         this.logger.logInfo(`Request received on ${req.path}`);
@@ -31,6 +34,7 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @RequireRole(UserRole.MANAGER)
     @Post('/ticket/export-pending/:workspaceUuid')
     async exportPendingTickets(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);
@@ -41,6 +45,7 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @RequireRole(UserRole.MANAGER)
     @Post('/ticket/import-statuses')
     async importTicketStatuses(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);
@@ -51,6 +56,7 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @RequireRole(UserRole.ASSOCIATE)
     @Post('/ticket/suggest-severity')
     async suggestSeverity(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);
@@ -61,6 +67,7 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @RequireRole(UserRole.MANAGER)
     @Post('/ticket/review')
     async reviewTicket(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);
@@ -71,6 +78,7 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @RequireRole(UserRole.MANAGER)
     @Post('/ticket/approve')
     async approveTicket(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);
@@ -81,6 +89,7 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 
+    @RequireRole(UserRole.ASSOCIATE)
     @Post('/ticket/update-details')
     async updateTicketDetails(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);

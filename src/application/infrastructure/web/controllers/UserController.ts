@@ -14,6 +14,7 @@ export class UserController extends BaseController {
     this.userService = container.getService('IUserService');
   }
 
+  @RequireRole(UserRole.MANAGER)
   @Post('/user')
   async createUser(req: Request, res: Response): Promise<void> {
     this.logger.logInfo(`Request received on ${req.path}`);
