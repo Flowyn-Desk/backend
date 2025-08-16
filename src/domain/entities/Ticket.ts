@@ -71,6 +71,10 @@ export class Ticket extends BaseEntity {
     canBeReviewedBy(managerUuid: string): boolean {
         return this.createdByUuid !== managerUuid && (this.status === TicketStatus.DRAFT || this.status === TicketStatus.REVIEW);
     }
+
+    canBeApprovedBy(managerUuid: string): boolean {
+        return this.createdByUuid !== managerUuid && this.status === TicketStatus.REVIEW;
+    }
     
     updateSeverity(newSeverity: TicketSeverity, reason: string, currentSeverity: TicketSeverity): TicketStatus {
         this.severityChangeReason = reason;

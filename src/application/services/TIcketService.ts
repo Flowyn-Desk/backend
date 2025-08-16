@@ -97,7 +97,12 @@ export class TicketService extends BaseService<
 
     async approveTicket(ticketUuid: string, managerUuid: string): Promise<ServiceResponse<TicketResponseDto>> {
         let ticket: Ticket = await this.repository.findByUuid(ticketUuid);
+        const canAppove: boolean = ticket.canBeApprovedBy(managerUuid);
+        if (!canAppove) {
+            throw new ForbiddenError('Manager cannot approve their own tickets or a which is not in REVIEW status');
+        }
         ticket.status = TicketStatus.PENDING;
+        ticket.severityChangeReason = 'Approved'
         const ticketRequest = this.createTicketResquestDtoFromTicket(ticket);
         await this.createHistoryRecord(
             ticket.uuid,
