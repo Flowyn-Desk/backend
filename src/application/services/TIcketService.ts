@@ -16,7 +16,6 @@ import { ForbiddenError } from '../../shared/Errors/ForbiddenError.js';
 import type { TicketHistoryResponseDto } from '../dto/ticket_history/TicketHistoryResponseDto.js';
 import type { TicketHistoryRequestDto } from '../dto/ticket_history/TicketHistoryRequestDto.js'
 import type { IAiService } from '../../domain/services/IAiService.js';
-import { setFlagsFromString } from 'v8';
 
 export class TicketService extends BaseService<
     Ticket,
@@ -109,7 +108,7 @@ export class TicketService extends BaseService<
         return new ServiceResponse(
             StatusCodes.OK,
             responseDto,
-            `Ticket ${responseDto.ticketNumber} created successfully`
+            `Ticket ${responseDto.ticketNumber} approved successfully`
         );
     }
 
@@ -217,15 +216,16 @@ export class TicketService extends BaseService<
         if (!canReview.payload) {
             throw new ForbiddenError('Manager cannot review their own tickets or ticket is not in DRAFT status');
         }
-
-        const currentSeverity = ticket.severity;
-
-        if (!reason) {
-            throw new BadRequestError('Severity change reason is required when changing severity');
+        ticket.status = TicketStatus.REVIEW;
+        if (newSeverity !== ticket.severity){
+            const currentSeverity = ticket.severity;
+            if (!reason) {
+                throw new BadRequestError('Severity change reason is required when changing severity');
+            }
+            const newStatus = ticket.updateSeverity(newSeverity, reason, currentSeverity);
+            ticket.status = newStatus;
         }
 
-        const newStatus = ticket.updateSeverity(newSeverity, reason, currentSeverity);
-        ticket.status = newStatus;
         ticket.markUpdated();
         await this.createHistoryRecord(
             ticket.uuid,
@@ -257,8 +257,8 @@ export class TicketService extends BaseService<
             throw new ForbiddenError('Only the ticket creator can update ticket details');
         }
 
-        if (ticket.status !== TicketStatus.REVIEW) {
-            throw new ConflictError('Ticket details can only be updated when ticket is in REVIEW status');
+        if (!(ticket.status === TicketStatus.DRAFT || ticket.status === TicketStatus.REVIEW)) {
+            throw new ConflictError('Ticket details can only be updated when ticket is in REVIEW or DRAFT status');
         }
 
         if (title) ticket.title = title;

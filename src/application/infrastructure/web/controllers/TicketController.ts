@@ -77,7 +77,7 @@ export class TicketController extends BaseController{
         const { ticketUuid, managerUuid } = req.body;
         const serviceResponse = await this.ticketService.approveTicket(ticketUuid, managerUuid);
         this.handleResponse(res, serviceResponse);
-        this.logger.logInfo(serviceResponse.message);
+        this.logger.logDebug(serviceResponse.message);
         this.logger.logInfo(`Request finished on ${req.path}`);
     }
 

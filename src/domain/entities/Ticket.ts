@@ -4,6 +4,7 @@ import { Type } from 'class-transformer';
 import { BaseEntity } from './BaseEntity.js';
 import { TicketSeverity } from '../enums/TicketSeverity.js';
 import { TicketStatus } from '../enums/TicketStatus.js';
+import { setFlagsFromString } from 'v8';
 
 export class Ticket extends BaseEntity {
     @IsString()
@@ -68,7 +69,7 @@ export class Ticket extends BaseEntity {
     }
 
     canBeReviewedBy(managerUuid: string): boolean {
-        return this.createdByUuid !== managerUuid && this.status === TicketStatus.DRAFT;
+        return this.createdByUuid !== managerUuid && (this.status === TicketStatus.DRAFT || this.status === TicketStatus.REVIEW);
     }
     
     updateSeverity(newSeverity: TicketSeverity, reason: string, currentSeverity: TicketSeverity): TicketStatus {
@@ -76,9 +77,9 @@ export class Ticket extends BaseEntity {
         this.severity = newSeverity;
         
         if (this.isSeverityIncreased(currentSeverity, newSeverity)) {
-            return TicketStatus.REVIEW;
+            return TicketStatus.DRAFT;
         }
-        return TicketStatus.PENDING;
+        return this.status;
     }
     
     private isSeverityIncreased(currentSeverity: TicketSeverity, newSeverity: TicketSeverity): boolean {
