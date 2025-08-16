@@ -79,10 +79,9 @@ export class TicketHistoryService extends BaseService<
         );
     }
 
-    async findByTicket(ticketUuid: string): Promise<ServiceResponse<TicketHistoryResponseDto[]>> {
+    async findByTicket(ticketUuid: string): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>> {
         const histories = await this.repository.findByTicket(ticketUuid);
-        const activeHistories = histories.filter(h => h.active);
-        const responseDtos = activeHistories.map(this.toResponseDto);
+        const responseDtos = histories.map(this.toResponseDto);
 
         return new ServiceResponse(
             StatusCodes.OK,
@@ -91,10 +90,9 @@ export class TicketHistoryService extends BaseService<
         );
     }
 
-    async findByUser(userUuid: string): Promise<ServiceResponse<TicketHistoryResponseDto[]>> {
+    async findByUser(userUuid: string): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>> {
         const histories = await this.repository.findByUser(userUuid);
-        const activeHistories = histories.filter(h => h.active);
-        const responseDtos = activeHistories.map(this.toResponseDto);
+        const responseDtos = histories.map(this.toResponseDto);
 
         return new ServiceResponse(
             StatusCodes.OK,
@@ -103,10 +101,9 @@ export class TicketHistoryService extends BaseService<
         );
     }
 
-    async findRecentActivity(limit: number = 10): Promise<ServiceResponse<TicketHistoryResponseDto[]>> {
+    async findRecentActivity(limit: number = 10): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>> {
         const histories = await this.repository.findRecentActivity(limit);
-        const activeHistories = histories.filter(h => h.active);
-        const responseDtos = activeHistories.map(this.toResponseDto);
+        const responseDtos = histories.map(this.toResponseDto);
 
         return new ServiceResponse(
             StatusCodes.OK,

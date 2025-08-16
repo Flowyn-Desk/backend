@@ -35,7 +35,7 @@ export class UserController extends BaseController {
     this.logger.logInfo(`Request finished on ${req.path}`);
   }
 
-  @RequireRole(UserRole.ADMIN)
+  @RequireRole(UserRole.ASSOCIATE)
   @Get('/user/:uuid')
   async getByUuid(req: Request, res: Response): Promise<void> {
     this.logger.logInfo(`Request received on ${req.path}`);

@@ -1,7 +1,7 @@
 import { UserRole } from "../../../../domain/enums/UserRole.js";
 import { ITicketService } from "../../../../domain/services/ITicketService.js";
 import { Container } from "../../dependency-injection/container.js";
-import { Get, Post, RequireRole } from "../decorators/RouteDecorators.js";
+import { Get, Post, Delete, RequireRole } from "../decorators/RouteDecorators.js";
 import { BaseController } from "./BaseController.js";
 import type { Request, Response  } from "express";
 
@@ -95,6 +95,28 @@ export class TicketController extends BaseController{
         this.logger.logInfo(`Request received on ${req.path}`);
         const { ticketUuid, associateUuid, title, description } = req.body;
         const serviceResponse = await this.ticketService.updateTicketDetails(ticketUuid, associateUuid, title, description);
+        this.handleResponse(res, serviceResponse);
+        this.logger.logInfo(serviceResponse.message);
+        this.logger.logInfo(`Request finished on ${req.path}`);
+    }
+
+    @RequireRole(UserRole.ASSOCIATE)
+    @Delete('/ticket/delete/:uuid')
+    async deleteTicket(req: Request, res: Response): Promise<void> {
+        this.logger.logInfo(`Request received on ${req.path}`);
+        const { uuid } = (req as any).params;
+        const serviceResponse = await this.ticketService.delete(uuid);
+        this.handleResponse(res, serviceResponse);
+        this.logger.logInfo(serviceResponse.message);
+        this.logger.logInfo(`Request finished on ${req.path}`);
+    }
+
+    @RequireRole(UserRole.ASSOCIATE)
+    @Get('/ticket/history/:uuid')
+    async getTicketHistory(req: Request, res: Response): Promise<void> {
+        this.logger.logInfo(`Request received on ${req.path}`);
+        const { uuid } = (req as any).params;
+        const serviceResponse = await this.ticketService.getTicketHistory(uuid)
         this.handleResponse(res, serviceResponse);
         this.logger.logInfo(serviceResponse.message);
         this.logger.logInfo(`Request finished on ${req.path}`);

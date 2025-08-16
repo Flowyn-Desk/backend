@@ -17,6 +17,7 @@ import type { TicketHistoryResponseDto } from '../dto/ticket_history/TicketHisto
 import type { TicketHistoryRequestDto } from '../dto/ticket_history/TicketHistoryRequestDto.js'
 import type { IAiService } from '../../domain/services/IAiService.js';
 
+
 export class TicketService extends BaseService<
     Ticket,
     TicketRequestDto,
@@ -117,6 +118,7 @@ export class TicketService extends BaseService<
         const sequence = await this.repository.getNextSequenceNumber(currentYear, request.workspaceUuid);
         request.ticketNumber = Ticket.generateTicketNumber(currentYear, sequence);
         request.status = TicketStatus.DRAFT;
+        request.severityChangeReason = 'Created'
 
         const entity = this.toEntity(request);
         entity.validate();
@@ -369,7 +371,7 @@ export class TicketService extends BaseService<
             header: true,
             skipEmptyLines: true,
             delimiter: ',',
-            quotes: false  // only quote when necessary
+            quotes: false
         });
     
         return new ServiceResponse(
