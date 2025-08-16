@@ -81,9 +81,10 @@ export class Ticket extends BaseEntity {
         this.severity = newSeverity;
         
         if (this.isSeverityIncreased(currentSeverity, newSeverity)) {
-            return TicketStatus.DRAFT;
+            return TicketStatus.REVIEW;
+        }else{
+            return TicketStatus.PENDING;
         }
-        return this.status;
     }
     
     private isSeverityIncreased(currentSeverity: TicketSeverity, newSeverity: TicketSeverity): boolean {

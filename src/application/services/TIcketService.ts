@@ -217,24 +217,18 @@ export class TicketService extends BaseService<
         if (!this.isValidUuid(ticketUuid) || !this.isValidUuid(managerUuid)) {
             throw new BadRequestError('Invalid UUID format');
         }
-        const ticket = await this.repository.findByUuid(ticketUuid);
+        let ticket = await this.repository.findByUuid(ticketUuid);
         const canReview = await this.canUserReviewTicket(ticketUuid, managerUuid);
         if (!canReview.payload) {
             throw new ForbiddenError('Manager cannot review their own tickets or ticket is not in DRAFT status');
         }
-        ticket.status = TicketStatus.REVIEW;
-        if (newSeverity !== ticket.severity) {
-            const currentSeverity = ticket.severity;
-            if (!reason) {
-                throw new BadRequestError('Severity change reason is required when changing severity');
-            }
-            const newStatus = ticket.updateSeverity(newSeverity, reason, currentSeverity);
-            ticket.status = newStatus;
-        }
-        if (!reason) {
+        if ((newSeverity !== ticket.severity) && !reason) {
+            throw new BadRequestError('Severity change reason is required when changing severity');
+        }else{
             ticket.severityChangeReason = 'Reviewed'
         }
-
+        const newStatus = ticket.updateSeverity(newSeverity, reason, ticket.severity);
+        ticket.status = newStatus;
         ticket.markUpdated();
         await this.createHistoryRecord(
             ticket.uuid,
@@ -275,11 +269,12 @@ export class TicketService extends BaseService<
 
         ticket.status = TicketStatus.DRAFT;
         ticket.markUpdated();
-
+        let ticketRequest = this.createTicketResquestDtoFromTicket(ticket);
+        ticketRequest.severityChangeReason = 'Updated'
         await this.createHistoryRecord(
             ticket.uuid,
             associateUuid,
-            this.createTicketResquestDtoFromTicket(ticket)
+            ticketRequest
         );
 
         const updatedTicket = await this.repository.update(ticketUuid, ticket);
