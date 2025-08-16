@@ -49,8 +49,8 @@ export class TicketController extends BaseController{
     @Post('/ticket/import-statuses')
     async importTicketStatuses(req: Request, res: Response): Promise<void> {
         this.logger.logInfo(`Request received on ${req.path}`);
-        const { csvContent } = req.body;
-        const serviceResponse = await this.ticketService.importTicketStatuses(csvContent);
+        const { csvContent, managerUuid } = req.body;
+        const serviceResponse = await this.ticketService.importTicketStatuses(csvContent, managerUuid);
         this.handleResponse(res, serviceResponse);
         this.logger.logInfo(serviceResponse.message);
         this.logger.logInfo(`Request finished on ${req.path}`);

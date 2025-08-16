@@ -10,4 +10,8 @@ export interface TicketHistoryResponseDto extends BaseResponseDto {
   previousSeverity?: TicketSeverity | null;
   newSeverity?: TicketSeverity | null;
   changeReason?: string | null;
+  previousDescription: string | undefined;
+  newDescription: string | undefined;
+  previousTitle?: string;
+  newTitle?: string;
 }

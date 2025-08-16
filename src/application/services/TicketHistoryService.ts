@@ -38,7 +38,11 @@ export class TicketHistoryService extends BaseService<
             newStatus: entity.newStatus,
             previousSeverity: entity.previousSeverity ?? null,
             newSeverity: entity.newSeverity ?? null,
-            changeReason: entity.changeReason ?? null
+            changeReason: entity.changeReason ?? null,
+            previousTitle: entity.previousTitle,
+            newTitle: entity.newTitle,
+            previousDescription: entity.previousDescription,
+            newDescription: entity.newDescription
         };
     }
 
@@ -67,7 +71,11 @@ export class TicketHistoryService extends BaseService<
             request.newStatus,
             currentTicket.severity,
             request.newSeverity,
-            request.changeReason
+            request.changeReason,
+            currentTicket.title,
+            request.newTitle,
+            currentTicket.description,
+            request.newDescription
         );
         ticketHistory.validate()
         const newHistory = await this.repository.create(ticketHistory);

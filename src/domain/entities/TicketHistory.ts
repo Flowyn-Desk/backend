@@ -18,25 +18,41 @@ export class TicketHistory extends BaseEntity {
     newStatus: TicketStatus;
 
     @IsOptional()
+    previousTitle: string | undefined;
+
+    @IsOptional()
+    newTitle: string | undefined;
+
+    @IsOptional()
+    previousDescription: string | undefined;
+
+    @IsOptional()
+    newDescription: string | undefined;
+
+    @IsOptional()
     @IsEnum(TicketSeverity)
     previousSeverity: TicketSeverity | undefined;
 
     @IsOptional()
     @IsEnum(TicketSeverity)
-    newSeverity?: TicketSeverity | undefined;;
+    newSeverity: TicketSeverity | undefined;
 
     @IsOptional()
     @IsString()
-    changeReason?: string | undefined;;
+    changeReason: string | undefined;
 
     constructor(
         ticketUuid: string,
         userUuid: string,
         previousStatus: TicketStatus,
         newStatus: TicketStatus,
-        previousSeverity?: TicketSeverity,
-        newSeverity?: TicketSeverity,
+        previousSeverity: TicketSeverity,
+        newSeverity: TicketSeverity,
         changeReason?: string,
+        previousTitle?: string,
+        newTitle?: string,
+        previousDescription?: string,
+        newDescription?: string,
         uuid?: string,
         createdAt?: Date,
         updatedAt?: Date,
@@ -51,5 +67,9 @@ export class TicketHistory extends BaseEntity {
         this.previousSeverity = previousSeverity;
         this.newSeverity = newSeverity;
         this.changeReason = changeReason;
+        this.previousTitle = previousTitle;
+        this.newTitle = newTitle;
+        this.previousDescription = previousDescription;
+        this.newDescription = newDescription;
     }
 }

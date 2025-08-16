@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 import { BaseEntity } from './BaseEntity.js';
 import { TicketSeverity } from '../enums/TicketSeverity.js';
 import { TicketStatus } from '../enums/TicketStatus.js';
-import { setFlagsFromString } from 'v8';
+
 
 export class Ticket extends BaseEntity {
     @IsString()

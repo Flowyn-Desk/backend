@@ -18,10 +18,10 @@ export interface ITicketService extends IBaseService<TicketRequestDto, TicketRes
     canUserReviewTicket(ticketUuid: string, managerUuid: string): Promise<ServiceResponse<boolean>>;
     suggestSeverity(title: string, description: string): Promise<ServiceResponse<TicketSeverity>>;
     exportPendingTickets(workspaceUuid: string): Promise<ServiceResponse<string>>;
-    importTicketStatuses(csvContent: string): Promise<ServiceResponse<void>>;
+    importTicketStatuses(csvContent: string, managerUuid: string): Promise<ServiceResponse<void>>;
     getTicketHistory(ticketUuid: string): Promise<ServiceResponse<Array<TicketHistoryResponseDto>>>;
     exportTicketsToCsv(tickets: Array<Ticket>): Promise<ServiceResponse<string>>;
-    updateCsvToTickets(csvContent: string): Promise<ServiceResponse<Array<TicketResponseDto>>>;
+    updateCsvToTickets(csvContent: string, managerUuid: string): Promise<ServiceResponse<Array<TicketResponseDto>>>;
     approveTicket(ticketUuid: string, managerUuid: string): Promise<ServiceResponse<TicketResponseDto>>;
     approveTicket(ticketUuid: string, managerUuid: string): Promise<ServiceResponse<TicketResponseDto>>;
 }

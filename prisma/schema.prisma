@@ -115,20 +115,23 @@ model Ticket {
 // TICKET HISTORY MODEL
 // ============================================
 model TicketHistory {
-  uuid             String          @id @default(uuid()) @db.Uuid
-  ticketUuid       String          @map("ticket_uuid") @db.Uuid
-  userUuid         String          @map("user_uuid") @db.Uuid
-  previousStatus   TicketStatus    @map("previous_status")
-  newStatus        TicketStatus    @map("new_status")
-  previousSeverity TicketSeverity? @map("previous_severity")
-  newSeverity      TicketSeverity? @map("new_severity")
-  changeReason     String?         @map("change_reason") @db.Text
-  timestamp        DateTime        @default(now()) @db.Timestamptz
-  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz
-  deletedAt        DateTime?       @map("deleted_at") @db.Timestamptz
-  active           Boolean         @default(true)
-
+  uuid                String          @id @default(uuid()) @db.Uuid
+  ticketUuid          String          @map("ticket_uuid") @db.Uuid
+  userUuid            String          @map("user_uuid") @db.Uuid
+  previousStatus      TicketStatus    @map("previous_status")
+  newStatus           TicketStatus    @map("new_status")
+  previousSeverity    TicketSeverity? @map("previous_severity")
+  newSeverity         TicketSeverity? @map("new_severity")
+  changeReason        String?         @map("change_reason") @db.Text
+  timestamp           DateTime        @default(now()) @db.Timestamptz
+  createdAt           DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime        @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt           DateTime?       @map("deleted_at") @db.Timestamptz
+  active              Boolean         @default(true)
+  previousTitle       String?         @map("previous_title")
+  newTitle            String?         @map("new_title")
+  previousDescription String?         @map("previous_description")
+  newDescription      String?         @map("new_description")
   // Relations
   ticket Ticket @relation(fields: [ticketUuid], references: [uuid], onDelete: Cascade)
   user   User   @relation(fields: [userUuid], references: [uuid], onDelete: Restrict)

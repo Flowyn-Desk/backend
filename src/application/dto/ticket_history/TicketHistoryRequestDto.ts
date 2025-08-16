@@ -7,4 +7,8 @@ export interface TicketHistoryRequestDto{
   newStatus: TicketStatus;
   newSeverity: TicketSeverity;
   changeReason: string;
+  previousTitle?: string;
+  newTitle?: string;
+  previousDescription?: string;
+  newDescription?: string;
 }
