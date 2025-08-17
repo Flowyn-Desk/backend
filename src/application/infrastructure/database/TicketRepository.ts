@@ -72,11 +72,12 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
     }
 
     async getNextSequenceNumber(year: number, workspaceUuid: string): Promise<number> {
+        console.log('YEAR')
+        console.log(year)
         const ticketCount = await this.prisma.ticket.count({
             where: {
-                ticketNumber: { startsWith: `TKT-${year}-` },
-                workspaceUuid,
-                active: true,
+                ticketNumber: { contains: `TKT-${year}-` },
+                workspaceUuid
             },
         });
         return ticketCount + 1;
