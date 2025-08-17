@@ -35,7 +35,7 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
 
     async findByStatus(workspaceUuid: string, status: TicketStatus): Promise<Ticket[]> {
         const records: Array<any> = await this.prisma.ticket.findMany({
-            where: { status, active: true, workspaceUuid},
+            where: { status, active: true, workspaceUuid },
         });
         return records.map(record => this.mapToEntity(record));
     }
@@ -65,37 +65,23 @@ export class TicketRepository extends BaseRepository<Ticket> implements ITicketR
         const record = await this.prisma.ticket.findFirst({
             where: { ticketNumber, active: true },
         });
-        if (!record){
+        if (!record) {
             throw new NotFoundError(`The ticket ${ticketNumber} was not found`)
         }
         return this.mapToEntity(record);
     }
 
     async getNextSequenceNumber(year: number, workspaceUuid: string): Promise<number> {
-        const latestTicket = await this.prisma.ticket.findFirst({
+        const ticketCount = await this.prisma.ticket.count({
             where: {
                 ticketNumber: { startsWith: `TKT-${year}-` },
                 workspaceUuid,
                 active: true,
             },
-            orderBy: { ticketNumber: 'desc' },
         });
-    
-        if (!latestTicket) {
-            return 1;
-        }
-    
-        const parts = latestTicket.ticketNumber.split('-');
-        const sequenceStr = parts[2] ?? '0';
-        const sequence = parseInt(sequenceStr, 10);
-    
-        if (isNaN(sequence)) {
-            return 1;
-        }
-    
-        return sequence + 1;
+        return ticketCount + 1;
     }
-    
+
     async findByStatusAndWorkspace(status: TicketStatus, workspaceUuid: string): Promise<Ticket[]> {
         const records: Array<any> = await this.prisma.ticket.findMany({
             where: { status, workspaceUuid, active: true },
