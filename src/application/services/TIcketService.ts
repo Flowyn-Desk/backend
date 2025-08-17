@@ -222,6 +222,9 @@ export class TicketService extends BaseService<
         if (!canReview.payload) {
             throw new ForbiddenError('Manager cannot review their own tickets or ticket is not in DRAFT status');
         }
+        if (!newSeverity){
+            newSeverity = ticket.severity;
+        }
         if ((newSeverity !== ticket.severity) && !reason) {
             throw new BadRequestError('Severity change reason is required when changing severity');
         }else{
